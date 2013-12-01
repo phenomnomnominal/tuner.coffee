@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>dataBuffer.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>dataBuffer.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h3 id="data-buffer-">Data Buffer:</h3>
+<hr>
+<p>In order to always have enough data to get sufficient resolution while running
+the tuner in real-time, a shifting window buffer is used. This buffer always
+contains <code>8192</code> samples, however the data is shifted along every <code>2048</code> samples.</p>
+
+        
+          <div class='highlight'><pre>Tuner.DataBuffer = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <p>The buffer is initialised here, as well as the indices that are used to shift
+data around within the buffer.</p>
+
+        
+          <div class='highlight'><pre>  buffer = [<span class="number">0.</span>..Tuner.Constants.FFTSIZE].map<span class="function"> -&gt;</span> <span class="number">0</span>
+  bufferFillSize = Tuner.Constants.BUFFER_FILL_SIZE
+
+  shiftToStart = <span class="number">0</span>
+  shiftToEnd = buffer.length - Tuner.Constants.BUFFER_FILL_SIZE
+  shiftFromStart = Tuner.Constants.BUFFER_FILL_SIZE
+  shiftFromEnd = buffer.length
+
+  insertStart = buffer.length - Tuner.Constants.BUFFER_FILL_SIZE
+  insertEnd = buffer.length</pre></div>
+        
+      
+        
+        <p>The actual <strong><code>ScriptProcessorNode</code></strong> that does the shifting operation is then
+created, and the <code>onaudioprocess</code> handler is assigned.</p>
+
+        
+          <div class='highlight'><pre>  filler = Tuner.Constants.AUDIO_CONTEXT.createScriptProcessor bufferFillSize</pre></div>
+        
+      
+        
+        <h3 id="onaudioprocess-">onaudioprocess:</h3>
+<hr>
+
+        
+          <div class='highlight'><pre>  filler.<span class="function"><span class="title">onaudioprocess</span> = <span class="params">(e)</span> -&gt;</span></pre></div>
+        
+      
+        
+        <p>First the data is read out of the <code>inputBuffer</code> and converted into an Array,</p>
+
+        
+          <div class='highlight'><pre>    input = (d <span class="keyword">for</span> d <span class="keyword">in</span> e.inputBuffer.getChannelData(<span class="number">0</span>))</pre></div>
+        
+      
+        
+        <p>then the last <code>6144</code> samples are shifted along in the buffer,</p>
+
+        
+          <div class='highlight'><pre>    buffer[shiftToStart...shiftToEnd] = buffer[shiftFromStart...shiftFromEnd]</pre></div>
+        
+      
+        
+        <p>and the <code>inputBuffer</code> is added to the end of the buffer.</p>
+
+        
+          <div class='highlight'><pre>    buffer[insertStart...insertEnd] = input[<span class="number">0.</span>..input.length]</pre></div>
+        
+      
+        
+        <p>The <strong><code>ScriptProcessorNode</code></strong> is attached to the <code>buffer</code> and then the buffer
+is returned from the module.</p>
+
+        
+          <div class='highlight'><pre>  buffer.filler = filler
+  buffer</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

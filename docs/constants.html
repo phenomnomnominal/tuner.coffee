@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>constants.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>constants.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="constants-">Constants:</h2>
+<hr>
+
+        
+          <div class='highlight'><pre>Tuner.Constants = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <h3 id="audiocontext-constants-">AudioContext constants:</h3>
+<hr>
+<ul>
+<li>Audio Context - global instance of <strong><code>AudioContext</code></strong></li>
+<li>Sample rate - samples per second through the Web Audio API</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  audioContext = <span class="keyword">new</span> AudioContext()
+
+  <span class="attribute">AUDIO_CONTEXT</span>: audioContext
+  <span class="attribute">SAMPLE_RATE</span>: audioContext.sampleRate</pre></div>
+        
+      
+        
+        <h3 id="filter-constants-">Filter constants:</h3>
+<hr>
+<ul>
+<li>Low Pass Frequency - attenuation frequency for the low-pass filter.</li>
+<li>High Pass Frequency - attenutation frequency for the high-pass filter.</li>
+<li>Filter Q - cut-off frequency peak resonance.</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="attribute">LOW_PASS_FREQUENCY</span>: <span class="number">4000</span>
+  <span class="attribute">HIGH_PASS_FREQUENCY</span>: <span class="number">20</span>
+  <span class="attribute">FILTER_Q</span>: <span class="number">0.1</span></pre></div>
+        
+      
+        
+        <h3 id="databuffer-constants-">DataBuffer constants:</h3>
+<hr>
+<ul>
+<li>Buffer Fill Size - shifting window buffer window size.</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="attribute">BUFFER_FILL_SIZE</span>: <span class="number">2048</span></pre></div>
+        
+      
+        
+        <h3 id="fft-constants-">FFT constants:</h3>
+<hr>
+<ul>
+<li>FFT size - Fourier transform input buffer size.</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="attribute">FFTSIZE</span>: <span class="number">8192</span></pre></div>
+        
+      
+        
+        <h3 id="pitch-constants-">Pitch constants:</h3>
+<hr>
+<ul>
+<li>Reference Pitch - default reference pitch for frequency generation.</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="attribute">REFERENCE_PITCH</span>: <span class="number">440</span></pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

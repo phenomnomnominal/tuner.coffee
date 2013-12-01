@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>pitchDetection.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>pitchDetection.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="pitch-detection-">Pitch Detection:</h2>
+<hr>
+
+        
+          <div class='highlight'><pre>Tuner.PitchDetection = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <p>A few local references are made, for the sake of brevity.</p>
+
+        
+          <div class='highlight'><pre>  bandwidth = Tuner.Constants.SAMPLE_RATE / Tuner.Constants.FFTSIZE
+  maxPeaks = <span class="number">0</span>
+  maxPeakCount = <span class="number">0</span>
+
+  dataBuffer = Tuner.DataBuffer
+  fft = Tuner.FFT</pre></div>
+        
+      
+        
+        <h3 id="process-">process:</h3>
+<hr>
+<p><strong><code>process</code></strong> is where the real magic of the tuner happens. 10 times 
+each second, the data in the buffer is proccessed. This involves several
+steps:</p>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">process</span> = -&gt;</span></pre></div>
+        
+      
+        
+        <p>A copy is made of the buffer data</p>
+
+        
+          <div class='highlight'><pre>    bufferCopy = dataBuffer[<span class="number">0.</span>..dataBuffer.length]</pre></div>
+        
+      
+        
+        <p>The Gaussian window is applied to the buffer data.</p>
+
+        
+          <div class='highlight'><pre>    Tuner.Gauss.process bufferCopy</pre></div>
+        
+      
+        
+        <p>The buffer data is downsampled by a factor of four and then upsampled
+the original data rate by inserting <code>0</code>s.</p>
+
+        
+          <div class='highlight'><pre>    resampled = bufferCopy.map <span class="function"><span class="params">(val, index)</span> -&gt;</span> <span class="keyword">if</span> index % <span class="number">4</span> <span class="keyword">then</span> <span class="number">0</span> <span class="keyword">else</span> val</pre></div>
+        
+      
+        
+        <p>The FFT is then applied to the upsampled data.</p>
+
+        
+          <div class='highlight'><pre>    fft.transform resampled
+    spectrum = (s <span class="keyword">for</span> s <span class="keyword">in</span> fft.spectrum)
+    spectrum = spectrum[<span class="number">0.</span>..spectrum.length / <span class="number">4</span>]</pre></div>
+        
+      
+        
+        <p>The first second of data is assumed to be noise, so it is passed to the
+<strong><code>NoiseRemoval</code></strong> module to handle. Once it has got enough data, <code>limit</code>
+will be set, and the data will skip that step.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">unless</span> Tuner.NoiseRemoval.limit
+      Tuner.NoiseRemoval.process spectrum</pre></div>
+        
+      
+        
+        <p>The values from the FFT spectrum are sorted by their peak value.</p>
+
+        
+          <div class='highlight'><pre>    spectrumPeaks = spectrum.map <span class="function"><span class="params">(val, index)</span> -&gt;</span> <span class="attribute">x</span>: index, <span class="attribute">y</span>: val
+    spectrumPeaks.sort <span class="function"><span class="params">(peakA, peakB)</span> -&gt;</span> (peakB.y - peakA.y)</pre></div>
+        
+      
+        
+        <p>The top <code>8</code> highest peaks are selected, provided they are large enough.</p>
+
+        
+          <div class='highlight'><pre>    peaks = spectrumPeaks[<span class="number">0.</span>.<span class="number">.8</span>].filter <span class="function"><span class="params">(peak)</span> -&gt;</span> peak.y &gt; Tuner.NoiseRemoval.limit</pre></div>
+        
+      
+        
+        <p>If there are any peaks found, any values from either side of the peaks
+are removed (as they are also likely to be peaks, but they provide no
+useful information). The remaining peaks are sorted by their frequency
+again, with lower values having lover indexes.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> peaks.length &gt; <span class="number">0</span> <span class="keyword">and</span> Tuner.NoiseRemoval.limit
+      <span class="keyword">for</span> p <span class="keyword">in</span> [<span class="number">0.</span>..peaks.length]
+        <span class="keyword">for</span> q <span class="keyword">in</span> [<span class="number">0.</span>..peaks.length]
+          <span class="keyword">if</span> p <span class="keyword">isnt</span> q
+            <span class="keyword">if</span> Math.abs(peaks[p]?.x - peaks[q]?.x) &lt; <span class="number">5</span>
+              peaks.splice q, <span class="number">1</span>
+      peaks.sort <span class="function"><span class="params">(a, b)</span> -&gt;</span> (a.x - b.x)</pre></div>
+        
+      
+        
+        <p>The maximum number of peaks that has been seen recently is recorded, 
+as it is sometimes the case that harmonics are percieved longer that
+the fundamental.</p>
+
+        
+          <div class='highlight'><pre>      maxPeaks = <span class="keyword">if</span> maxPeaks &lt; peaks.length <span class="keyword">then</span> peaks.length <span class="keyword">else</span> maxPeaks
+      <span class="keyword">if</span> maxPeaks &gt; <span class="number">0</span> <span class="keyword">then</span> maxPeakCount = <span class="number">0</span></pre></div>
+        
+      
+        
+        <p>A test is run to check if the highest peak is a harmonic by checking
+the most common frequency ratios - namely <code>1.5</code> times the fundamental
+(perfect 5th) and <code>2</code> times the fundamental (perfect octave) - and then
+swap the values if needed.</p>
+
+        
+          <div class='highlight'><pre>      firstFreq = peaks[<span class="number">0</span>].x * bandwidth
+      <span class="keyword">if</span> peaks.length &gt; <span class="number">1</span>
+        secondFreq = peaks[<span class="number">1</span>].x * bandwidth
+        <span class="keyword">if</span> <span class="number">1.4</span> &lt; (firstFreq / secondFreq) &lt; <span class="number">1.6</span>
+          peak = peaks[<span class="number">1</span>]
+      <span class="keyword">if</span> peaks.length &gt; <span class="number">2</span>
+        thirdFreq = peaks[<span class="number">2</span>].x * bandwidth
+        <span class="keyword">if</span> <span class="number">1.4</span> &lt; (firstFreq / thirdFreq) &lt; <span class="number">1.6</span>
+          peak = peaks[<span class="number">2</span>]
+      <span class="keyword">if</span> peaks.length &gt; <span class="number">1</span> <span class="keyword">or</span> maxPeaks <span class="keyword">is</span> <span class="number">1</span>
+        <span class="keyword">if</span> <span class="keyword">not</span> peak?
+          peak = peaks[<span class="number">0</span>]</pre></div>
+        
+      
+        
+        <p>If a maximal peak in the FFT spectrum is found, parabolic interpolation
+is performed on the log of the peak and the values either side, giving
+an accurate frequency representation.</p>
+
+        
+          <div class='highlight'><pre>        l = <span class="attribute">x</span>: peak.x - <span class="number">1</span>, <span class="attribute">y</span>: Math.log(spectrum[peak.x - <span class="number">1</span>])
+        p = <span class="attribute">x</span>: peak.x, <span class="attribute">y</span>: Math.log(spectrum[peak.x])
+        r = <span class="attribute">x</span>: peak.x + <span class="number">1</span>, <span class="attribute">y</span>: Math.log(spectrum[peak.x + <span class="number">1</span>])
+
+        interp = (<span class="number">0.5</span> * ((l.y - r.y) / (l.y - (<span class="number">2</span> * p.y) + r.y)) + p.x)</pre></div>
+        
+      
+        
+        <p>The frequency estimation is compared with the generated pitch value 
+to find the closest pitch, and the number of cents that the input audio
+is away from it.</p>
+
+        
+          <div class='highlight'><pre>        freq = interp * bandwidth
+        [note, cents] = Tuner.frequencyUtils.getPitch freq</pre></div>
+        
+      
+        
+        <p>This information is then displayed to the user.</p>
+
+        
+          <div class='highlight'><pre>        Tuner.Display.update bufferCopy, note, cents</pre></div>
+        
+      
+        
+        <p>If no large enough peaks are found, the display isn&#39;t changed, and if
+none are found for a sufficiently long time, the display is cleared.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">else</span>
+      maxPeaks = <span class="number">0</span>
+      maxPeakCount++
+      Tuner.Display.update bufferCopy
+
+  { process }</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

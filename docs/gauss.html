@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>gauss.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>gauss.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="gaussian-window-function-">Gaussian window function:</h2>
+<hr>
+<p>A <strong><a href="http://en.wikipedia.org/wiki/Window_function#Gaussian_windows">Gaussian</a></strong> window function is used on the time-domain buffer data.
+Because a time-domain Gaussian is also Gaussian in the frequency-domain, and
+since the <em>log</em> of a  Gaussian is a parabola, the resulting data can be used
+for exact quadratic interpolation in the frequency domain, which results in
+very accurate frequency estimation.</p>
+
+        
+          <div class='highlight'><pre>Tuner.Gauss = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <p><strong><code>gauss</code></strong> is the actual window function, which is evaluated for a given
+position <code>i</code>, in a buffer of size <code>length</code>. The <strong><code>α</code></strong> value of the Gaussian
+is inversely proportional to the standard deviation of the function, meaning 
+that the larger <strong><code>α</code></strong> is, the narrower the peak of the function is.</p>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">gauss</span> = <span class="params">(length, i, α = <span class="number">0.5</span>, pow = Math.pow, E = Math.E)</span> -&gt;</span>
+    pow(E, -<span class="number">0.5</span> * pow((i - (length - <span class="number">1</span>) / <span class="number">2</span>) / (α * (length - <span class="number">1</span>) / <span class="number">2</span>), <span class="number">2</span>))</pre></div>
+        
+      
+        
+        <p>Applying the windowing function to a buffer is just a matter of calling the
+<strong><code>gauss</code></strong> function on each item in the buffer.</p>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">process</span> = <span class="params">(input, α)</span> -&gt;</span>
+    length = input.length
+    <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">0.</span>..length]
+      input[i] *= gauss(length, i, α)
+
+  { process }</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

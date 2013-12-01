@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>noiseRemoval.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>noiseRemoval.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="noise-removal-">Noise Removal:</h2>
+<hr>
+<p>Since the tuner will likely use just a standard device microphone, background
+noise is going to be a big issue - things like noisy fans, people talking.</p>
+<p>The first second of audio data is presumed to be purely noise. This may be a
+dangerous assumption, but given that the user will need to grant permission
+for the microphone to be accessed, it shoud be okay.</p>
+
+        
+          <div class='highlight'><pre>Tuner.NoiseRemoval = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  processCount = <span class="number">0</span>
+  limit = -Infinity</pre></div>
+        
+      
+        
+        <h3 id="noiseremoval-process-">NoiseRemoval.process:</h3>
+<p>The <code>process</code> function will be called <code>10</code> times in the first second, and the
+maximal value from the <code>10</code> FFT spectrums is set as the <code>limit</code>. The value
+of the <code>limit</code> is limited to <code>0.001</code> to hopefully prevent any real data
+from setting a <code>limit</code> that is too high.</p>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">process</span> = <span class="params">(spectrum)</span> -&gt;</span>
+    <span class="keyword">if</span> processCount &lt; <span class="number">10</span>
+      limit = spectrum.reduce <span class="function"><span class="params">(p = limit, n)</span> -&gt;</span> <span class="keyword">if</span> n &gt; p <span class="keyword">then</span> n <span class="keyword">else</span> p
+      limit = <span class="keyword">if</span> limit  &gt; <span class="number">0.001</span> <span class="keyword">then</span> <span class="number">0.001</span> <span class="keyword">else</span> limit
+      processCount++</pre></div>
+        
+      
+        
+        <p>The peak noise value from the initial second of data is set on the 
+<strong><code>NoiseRemoval</code></strong> module.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">else</span>
+      Tuner.NoiseRemoval.limit = limit
+
+  { process }</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

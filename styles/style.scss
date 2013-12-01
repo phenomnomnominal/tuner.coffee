@@ -1,0 +1,140 @@
+@import 'constants';
+@import 'reset';
+@import 'fonts';
+@import 'mixins';
+
+.tuner {
+  * { @include border-box(); }
+  
+  &.dark {
+    background: $dark;
+  }
+  &.light {
+    background: $light;
+  }
+  
+  position: relative;
+  overflow: hidden;
+
+  font-family: $font, Sans-Serif;
+  font-weight: 100;
+
+  height: 100%;
+  min-height: 250px;
+  min-width: 250px;
+
+  .note {
+    @include absTopLeft();
+    @include transition(color, 100ms);
+
+    width: 100%;
+    height: 100%;
+
+    color: $main;
+    text-align: center;
+    
+    .name {
+      @include flexAll;
+      height: 100%;
+      
+      span {
+        font-size: 200px;
+      }
+      
+      sup {
+        font-size: 150px;
+      }
+    }
+  }
+  
+  .dial {
+    @include absTopLeft();
+    @include flexAll;
+
+    width: 100%;
+    height: 100%;
+    
+    .marker {
+      @include transition(all, 100ms);
+
+      width: 100%;
+      border-top: 6px solid $main;
+      margin-top: -3px;
+    }
+  }
+  
+  &.tuned .marker {
+    border-top: 6px solid $tuned;
+  }
+  
+  .target {
+    height: 50%;
+    border-bottom: 4px solid rgba(100, 100, 100, 0.3);
+  }
+  
+  
+  &.tuned .note {
+    color: $tuned;
+  }
+    
+  &.untuned .note {
+    color: $untuned;
+  }
+  
+  &.small {
+    canvas {
+      display: none;
+    }
+  }
+  
+  canvas {
+    @include absTopLeft();
+  }
+  
+  .help {
+    position: absolute;
+    bottom: 0;
+    
+    width: 20px;
+    height: 20px;
+    margin: 20px;
+    
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    
+    background: $main;
+    
+    &:hover {
+      width: 130px;
+    };
+    
+    a {
+      text-decoration: none;
+      color: $secondary;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  .sorry {
+    @include flexAll;
+    height: 100%;
+
+    h1, p {
+      width: 100%;
+      text-align: center;
+    }
+  
+    h1 {
+      color: $main;
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+  
+    p {
+      color: $secondary;
+    }
+  }
+}

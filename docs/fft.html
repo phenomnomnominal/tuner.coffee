@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>fft.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>fft.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="fourier-transform-">Fourier Transform:</h2>
+<hr>
+<p>The <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">Fast Fourier Transform</a> is a fast method of converting time-domain
+audio data into frequency-domain values for the amount of each frequency that
+is present in the original signal. This implementation is taken from
+<a href="https://twitter.com/corban">Corban Brook</a>&#39;s <a href="https://github.com/corbanbrook/dsp.js/">dsp.js</a> (thanks!).</p>
+
+        
+          <div class='highlight'><pre>Tuner.FFT = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <h2 id="fft-class-">FFT class:</h2>
+<hr>
+<p>Some important properties of the <strong><code>FFT</code></strong> are dependant on the size of the
+input buffer and the sample rate of the signal, specifically:</p>
+<ul>
+<li><p>The number of frequency bins that the data is split into - <code>@bufferSize / 2</code></p>
+</li>
+<li><p>The width of the bins - <code>@sampleRate / @bufferSize</code></p>
+</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="class"><span class="keyword">class</span> <span class="title">FFT</span></span>
+    <span class="attribute">constructor</span>: <span class="function"><span class="params">(<span class="property">@bufferSize</span>, <span class="property">@sampleRate</span>)</span> -&gt;</span></pre></div>
+        
+      
+        
+        <p>The <strong><code>FFT</code></strong> constructor creates a whole bunch of containers for creating
+the transformed frequency data.</p>
+
+        
+          <div class='highlight'><pre>      <span class="property">@bandwidth</span> = <span class="property">@sampleRate</span> / <span class="property">@bufferSize</span>
+
+      <span class="property">@spectrum</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span> / <span class="number">2</span>)
+      <span class="property">@real</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
+      <span class="property">@imag</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
+
+      <span class="property">@reverseTable</span> = <span class="keyword">new</span> Uint32Array(<span class="property">@bufferSize</span>)
+
+      limit = <span class="number">1</span>
+      bit = bufferSize &gt;&gt; <span class="number">1</span>
+
+      <span class="keyword">while</span> limit &lt; bufferSize
+        [<span class="number">0.</span>..limit].forEach <span class="function"><span class="params">(i)</span> =&gt;</span>
+          <span class="property">@reverseTable</span>[i + limit] = <span class="property">@reverseTable</span>[i] + bit
+        limit &lt;&lt;= <span class="number">1</span>
+        bit &gt;&gt;= <span class="number">1</span></pre></div>
+        
+      
+        
+        <p>It also generates the <code>sin</code> and <code>cos</code> values in advance.</p>
+
+        
+          <div class='highlight'><pre>      <span class="property">@sinTable</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
+      <span class="property">@cosTable</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
+
+      [<span class="number">0.</span>..bufferSize].forEach <span class="function"><span class="params">(i)</span> =&gt;</span>
+        <span class="property">@sinTable</span>[i] = Math.sin(-Math.PI / i)
+        <span class="property">@cosTable</span>[i] = Math.cos(-Math.PI / i)</pre></div>
+        
+      
+        
+        <h2 id="transform-">transform:</h2>
+<hr>
+<p>Each instance of the <strong><code>FFT</code></strong> class can take an <strong><code>ArrayBuffer</code></strong> containing
+time-domain audio data and compute the Fourier transform of that data, giving
+the frequency-domain components of the signal.</p>
+
+        
+          <div class='highlight'><pre>    <span class="attribute">transform</span>: <span class="function"><span class="params">(buffer)</span> -&gt;</span>
+      bufferSize = <span class="property">@bufferSize</span>
+      cosTable = <span class="property">@cosTable</span>
+      sinTable = <span class="property">@sinTable</span>
+      reverseTable = <span class="property">@reverseTable</span>
+      real = <span class="property">@real</span>
+      imag = <span class="property">@imag</span>
+      spectrum = <span class="property">@spectrum</span>
+
+      halfSize = <span class="number">1</span>          
+      [<span class="number">0.</span>..bufferSize].forEach <span class="function"><span class="params">(i)</span> -&gt;</span>
+        real[i] = buffer[reverseTable[i]]
+        imag[i] = <span class="number">0</span>
+
+      <span class="keyword">while</span> halfSize &lt; bufferSize
+        pSSR = cosTable[halfSize]
+        pSSI = sinTable[halfSize]
+
+        cPSR = <span class="number">1</span>
+        cPSI = <span class="number">0</span>
+
+        [<span class="number">0.</span>..halfSize].forEach <span class="function"><span class="params">(fftStep)</span> -&gt;</span>
+          i = fftStep
+          <span class="keyword">while</span> i &lt; bufferSize
+            offset = i + halfSize
+            tr = (cPSR * real[offset]) - (cPSI * imag[offset])
+            ti = (cPSR * imag[offset]) + (cPSI * real[offset])
+            real[offset] = real[i] - tr
+            imag[offset] = imag[i] - ti
+            real[i] += tr
+            imag[i] += ti
+            i += halfSize &lt;&lt; <span class="number">1</span>
+
+          tmpReal = cPSR
+          cPSR = (tmpReal * pSSR) - (cPSI * pSSI)
+          cPSI = (tmpReal * pSSI) + (cPSI * pSSR)
+        halfSize = halfSize &lt;&lt; <span class="number">1</span>
+
+      this.calculateSpectrum()</pre></div>
+        
+      
+        
+        <h2 id="calculatespectrum-">calculateSpectrum:</h2>
+<hr>
+<p>Once the time-domain data from the has been converted to frequency-domain
+values <strong><code>calculateSpectrum</code></strong> takes the complex numbers and converts them
+to real magnitudes for each frequency bin.</p>
+
+        
+          <div class='highlight'><pre>    <span class="attribute">calculateSpectrum</span>:<span class="function"> -&gt;</span>
+      spectrum = <span class="property">@spectrum</span>
+      real = <span class="property">@real</span>
+      imag = <span class="property">@imag</span>
+      bSi = <span class="number">2</span> / <span class="property">@bufferSize</span>
+      sqrt = Math.sqrt
+      [<span class="number">0.</span>..<span class="property">@bufferSize</span> / <span class="number">2</span>].forEach <span class="function"><span class="params">(index)</span> -&gt;</span>
+        r = real[index]
+        i = imag[index]
+        spectrum[index] = bSi * sqrt(r * r + i * i)</pre></div>
+        
+      
+        
+        <h2 id="fft-instance-">FFT instance:</h2>
+<hr>
+<p>The incoming audio from the microphone has a sample rate (FFT<sub>s</sub>) of
+<code>44100Hz</code>. Since the highest pitch in the pitch to frequency mapping is &#39;B7&#39;
+(<code>3951.07Hz</code>), data over roughly <code>8kHz</code> can be ignored. The downsampled rate
+that is used is <code>11025Hz</code> (FFT<sub>s</sub> / 4). As the FFT requires a input of
+length 2<sup>n</sup>, we use <code>8192</code> (2<sup>13</sup>). The relationship between
+FFT sample rate, FFT buffer length and FFT bin resolution, is:</p>
+<blockquote>
+<p>   <img src="public/images/fftEq.png"/></p>
+</blockquote>
+<p>An FFT<sub>s</sub> of <code>11025Hz</code> and FFT buffer length of <code>8192</code> gives a bin
+resolution of <code>1.3458Hz</code></p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">new</span> FFT(Tuner.Constants.FFTSIZE, Tuner.Constants.SAMPLE_RATE / <span class="number">4</span>)</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

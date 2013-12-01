@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>display.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>display.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="ui-and-display-functionality-">UI and display functionality:</h2>
+<hr>
+<p>The <strong><code>Display</code></strong> module is in charge of creating the URL and communicating
+with the user.</p>
+
+        
+          <div class='highlight'><pre>Tuner.Display = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  REPO_URL = <span class="string">'https://github.com/phenomnomnominal/tuner.coffee'</span></pre></div>
+        
+      
+        
+        <h3 id="templates-">Templates:</h3>
+<hr>
+<p>Since all that is passed to the <strong><code>Tuner</code></strong> function is the selector for an
+empty container, all the mark-up for the UI must be contained internally:</p>
+
+        
+          <div class='highlight'><pre>  Templates =
+      <span class="attribute">MarkUp</span>: <span class="string">"""
+              &lt;canvas&gt;&lt;/canvas&gt;
+              &lt;div class='target'&gt;&lt;/div&gt;
+              &lt;div class='dial'&gt;
+                &lt;div class='marker'&gt;&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class='note'&gt;
+                &lt;div class='name'&gt;&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class='help'&gt;
+                &lt;a href='<span class="subst">#{REPO_URL}</span>' target='_blank'&gt;?&lt;/a&gt;
+              &lt;/div&gt;
+              """</span>
+      <span class="attribute">Fallback</span>: <span class="string">"""
+                &lt;div class='sorry'&gt;
+                  &lt;div&gt;
+                    &lt;h1&gt;Sorry...&lt;/h1&gt;
+                    &lt;p&gt;Looks like you need a better browser to use this tuner.&lt;/p&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class='help'&gt;
+                  &lt;a href='<span class="subst">#{REPO_URL}</span>' target='_blank'&gt;?&lt;/a&gt;
+                &lt;/div&gt;
+                """</span></pre></div>
+        
+      
+        
+        <h3 id="shortcuts-">Shortcuts:</h3>
+<hr>
+<p>There are a few shortcuts to some commonly used functions, just to make
+things a bit easier.</p>
+
+        
+          <div class='highlight'><pre>  $ = document.querySelector.bind <span class="built_in">document</span>
+  $.style = getComputedStyle.bind <span class="built_in">window</span>
+  $.<span class="class"><span class="keyword">class</span> = </span>
+    <span class="attribute">add</span>: <span class="function"><span class="params">(selector)</span> -&gt;</span>
+      el = $ selector
+      <span class="function"><span class="params">(names...)</span> -&gt;</span> names.forEach <span class="function"><span class="params">(name)</span> -&gt;</span> el.classList.add name
+    <span class="attribute">remove</span>: <span class="function"><span class="params">(selector)</span> -&gt;</span>
+      el = $ selector
+      <span class="function"><span class="params">(names...)</span> -&gt;</span> names.forEach <span class="function"><span class="params">(name)</span> -&gt;</span> el.classList.remove name</pre></div>
+        
+      
+        
+        <h3 id="init-">init:</h3>
+<hr>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = <span class="params">(containerSelector, theme = <span class="string">'light'</span>)</span> -&gt;</span></pre></div>
+        
+      
+        
+        <p><strong><code>init</code></strong> sets the <code>&#39;tuner&#39;</code> class on the container element, and sets the
+theme.</p>
+
+        
+          <div class='highlight'><pre>    $.class.add(containerSelector) <span class="string">'tuner'</span>, theme</pre></div>
+        
+      
+        
+        <h4 id="render-">Render:</h4>
+<p>It then looks at the result of the capabilities test (the 
+<code>Tuner.mightWork</code> value), and inserts the correct template.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> Tuner.mightWork
+      $(containerSelector).innerHTML = Templates.MarkUp
+    <span class="keyword">else</span>
+      $(containerSelector).innerHTML = Templates.Fallback</pre></div>
+        
+      
+        
+        <h4 id="event-listeners-">Event Listeners:</h4>
+<p>It also adds event listeners for the <code>&#39;resize&#39;</code> event (which makes sure
+that the <code>&lt;canvas&gt;</code> is the right size), and the <code>&#39;hover&#39;</code> event for the help
+link.</p>
+
+        
+          <div class='highlight'><pre>    <span class="function"><span class="title">resize</span> = -&gt;</span>
+      tunerStyle = $.style $(containerSelector)
+      tunerHeight = parseInt tunerStyle.height, <span class="number">10</span>
+      tunerWidth = parseInt tunerStyle.width, <span class="number">10</span>
+      canvas = $ <span class="string">'canvas'</span>
+      <span class="keyword">if</span> canvas
+        canvas.height = tunerHeight
+        canvas.width = tunerWidth
+
+      $.class.remove(containerSelector) <span class="string">'small'</span>, <span class="string">'medium'</span>, <span class="string">'large'</span>
+      <span class="keyword">if</span> tunerWidth &lt; <span class="number">420</span>
+        size = <span class="string">'small'</span>
+      <span class="keyword">if</span> <span class="number">420</span> &lt;= tunerWidth &lt; <span class="number">820</span>
+        size = <span class="string">'medium'</span>
+      <span class="keyword">if</span> <span class="number">820</span> &lt;= tunerWidth
+        size = <span class="string">'large'</span>
+      $.class.add(containerSelector) size
+
+    addEventListener <span class="string">'resize'</span>, resize
+    resize()
+
+    helpLink = $ <span class="string">'.help a'</span>
+    helpLink.addEventListener <span class="string">'mouseover'</span>,<span class="function"> -&gt;</span> helpLink.innerText = <span class="string">'tuner.coffee'</span>
+    helpLink.addEventListener <span class="string">'mouseout'</span>,<span class="function"> -&gt;</span> helpLink.innerText = <span class="string">'?'</span></pre></div>
+        
+      
+        
+        <h3 id="update-">update:</h3>
+<hr>
+<p>There are two main parts of the UI that need to be update.</p>
+<h4 id="html-">HTML:</h4>
+<p>The name of the note that is currently being detected has to be updated or
+removed, and the centre marker needs to be offset by the right number of cents.</p>
+
+        
+          <div class='highlight'><pre>  update = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <p>This means updating a CSS3 Transform from JavaScript, which unfortunately means
+a little bit of black magic to get the right prefix:</p>
+
+        
+          <div class='highlight'><pre>    transform = <span class="keyword">do</span><span class="function"> -&gt;</span>
+      style = $.style document.documentElement
+      spellings = [
+        <span class="string">'transform'</span>,
+        <span class="string">'-moz-transform'</span>, <span class="string">'mozTransform'</span>, <span class="string">'MozTransform'</span>,
+        <span class="string">'-webkit-transform'</span>, <span class="string">'webkitTransform'</span>, <span class="string">'WebkitTransform'</span>,
+        <span class="string">'-o-transform'</span>, <span class="string">'oTransform'</span>, <span class="string">'OTransform'</span>,
+        <span class="string">'-ms-transform'</span>, <span class="string">'msTransform'</span>, <span class="string">'MsTransform'</span>
+      ]
+      <span class="keyword">for</span> spelling <span class="keyword">in</span> spellings
+        <span class="keyword">if</span> {}.hasOwnProperty.call(style, spelling) <span class="keyword">or</span> style[spelling]?
+          <span class="keyword">return</span> spelling</pre></div>
+        
+      
+        
+        <p>It is mostly a simple case of adding and removing classes, and creating the
+new elements for the note name.</p>
+
+        
+          <div class='highlight'><pre>    <span class="function"><span class="title">updateHTML</span> = <span class="params">(buffer, pitch, cents)</span> -&gt;</span>
+      $.class.remove(<span class="string">'.tuner'</span>) <span class="string">'tuned'</span>, <span class="string">'untuned'</span>
+      name = $ <span class="string">'.name'</span>
+      marker = $(<span class="string">'.marker'</span>).style
+      name.innerHTML = <span class="string">''</span>
+      <span class="keyword">if</span> pitch? <span class="keyword">and</span> cents?
+        <span class="keyword">if</span> Math.abs(cents) &lt; <span class="number">4</span>
+          $.class.add(<span class="string">'.tuner'</span>) <span class="string">'tuned'</span>
+        <span class="keyword">else</span>
+          $.class.add(<span class="string">'.tuner'</span>) <span class="string">'untuned'</span>
+        letter = document.createElement <span class="string">'span'</span>
+        letter.textContent = pitch.substr <span class="number">0</span>, <span class="number">1</span>
+        name.appendChild letter
+        <span class="keyword">if</span> <span class="string">'#'</span> <span class="keyword">in</span> pitch
+          accidental = document.createElement <span class="string">'sup'</span>
+          accidental.textContent = <span class="string">'#'</span>
+          name.appendChild accidental</pre></div>
+        
+      
+        
+        <p>But then it gets a little bit gross when we have to update the <code>translateY</code> value.</p>
+
+        
+          <div class='highlight'><pre>        height = parseInt $.style($(<span class="string">'.tuner'</span>)).height, <span class="number">10</span>
+        marker.setProperty transform, <span class="string">"translateY(<span class="subst">#{-(height / <span class="number">2</span>) * cents / <span class="number">50</span>}</span>px)"</span>
+      <span class="keyword">else</span>
+        marker.setProperty transform, <span class="string">"translateY(0px)"</span></pre></div>
+        
+      
+        
+        <h4 id="canvas-">Canvas:</h4>
+<p>For the <code>&lt;canvas&gt;</code>, it is just a case of reading the audio data out of the
+<code>buffer</code> and drawing it onto the screen.</p>
+<p>The all-time peak amplitude is stored so that most data fits within the
+<code>&lt;canvas&gt;</code>.</p>
+
+        
+          <div class='highlight'><pre>    timeMax = <span class="number">0</span>
+    <span class="function"><span class="title">updateCanvas</span> = <span class="params">(buffer)</span> -&gt;</span>
+      canvas = $ <span class="string">'canvas'</span>
+      context = canvas.getContext <span class="string">'2d'</span>
+      context.clearRect <span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height
+      max = buffer.reduce <span class="function"><span class="params">(max = <span class="number">0</span>, next)</span> -&gt;</span> 
+        <span class="keyword">if</span> Math.abs(next) &gt; max <span class="keyword">then</span> Math.abs(next) <span class="keyword">else</span> max
+      timeMax = <span class="keyword">if</span> max &gt; timeMax <span class="keyword">then</span> max <span class="keyword">else</span> timeMax
+      timeHeight = canvas.height / buffer.length
+      context.fillStyle = <span class="string">'#A5C7FD'</span>
+      <span class="keyword">for</span> s <span class="keyword">in</span> [<span class="number">0.</span>..buffer.length]
+        y = timeHeight * s
+        width = (canvas.width / <span class="number">3</span>) * (buffer[s] / timeMax)
+        x = canvas.width / <span class="number">2</span>
+        context.fillRect x, y, width, <span class="number">0.5</span></pre></div>
+        
+      
+        
+        <h4 id="update-">update:</h4>
+<p>The <strong><code>update</code></strong> function simply calls the <strong><code>updateHTML</code></strong> function and then
+the <strong><code>updateCanvas</code></strong> function.</p>
+
+        
+          <div class='highlight'><pre>    <span class="function"><span class="title">update</span> = <span class="params">(buffer, pitch, cents)</span>-&gt;</span>
+      updateHTML buffer, pitch, cents
+      updateCanvas buffer
+
+  { init, update }</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

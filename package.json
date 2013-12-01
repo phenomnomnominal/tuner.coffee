@@ -1,0 +1,45 @@
+{
+  "name": "tuner.coffee",
+  "version": "1.0.0",
+  "author": "phenomnomnominal <craigspence0@gmail.com>",
+  "description": "A guitar tuner using getUserMedia + Web Audio API",
+  "contributors": [
+    {
+      "name": "Craig Spence",
+      "email": "craigspence0@gmail.com"
+    },
+    {
+      "name": "Maxime Michel",
+      "email": "maxime.michel@gmail.com"
+    }
+  ],
+  "scripts": {
+    "start": "node ./bin/http-server",
+    "test": "vows --spec --isolate",
+    "predeploy": "echo This will be run before deploying the app",
+    "postdeploy": "echo This will be run after deploying the app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phenomnomnominal/tuner.coffee.git"
+  },
+  "keywords": [
+    "guitar",
+    "tuner",
+    "coffeescript",
+    "getUserMedia",
+    "Web Audio API"
+  ],
+  "devDependencies": {
+    "coffee-script": "1.6.3",
+    "grunt": "~0.4.2",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-docco-multi": "0.0.2",
+    "grunt-devserver": "~0.5.0",
+    "grunt-concurrent": "~0.4.2",
+    "grunt-contrib-sass": "~0.5.1"
+  },
+  "license": "MIT"
+}

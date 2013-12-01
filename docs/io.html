@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>io.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>io.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="io-">IO:</h2>
+<hr>
+<p>The <strong><code>Input</code></strong> module is in charge of creating the connection to the users
+microphone, and using the other modules to perform real-time pitch detection.</p>
+
+        
+          <div class='highlight'><pre>Tuner.Input = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <h3 id="init-">init:</h3>
+<hr>
+<p>Everything starts with the call to <code>getUserMedia</code>. Passing in <code>{ audio: true }</code>
+sets up the connection to the users microphone, and the <code>success</code> or <code>error</code>
+callback will be triggered depending on the result.</p>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = -&gt;</span>
+    navigator.getUserMedia <span class="attribute">audio</span>: <span class="literal">true</span>, success, error</pre></div>
+        
+      
+        
+        <h3 id="success-">success:</h3>
+<hr>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">success</span> = <span class="params">(stream)</span> -&gt;</span></pre></div>
+        
+      
+        
+        <p>If a successful connection is made to the user media device (microphone), the
+audio set-up is intialised. The source of the audio (the <code>stream</code> from the
+microphone) is connected through the low-pass filter and the high-pass filter,
+and ends up in the <code>dataBuffer</code>. The <code>dataBuffer</code> must be connected to the
+destination, but as the <code>dataBuffer</code> does not create any output, no audible
+sound is played.</p>
+
+        
+          <div class='highlight'><pre>    audioContext = Tuner.Constants.AUDIO_CONTEXT
+    src = audioContext.createMediaStreamSource stream
+    src.connect Tuner.Filter.LP
+    Tuner.Filter.LP.connect Tuner.Filter.HP
+    Tuner.Filter.HP.connect Tuner.DataBuffer.filler
+    Tuner.DataBuffer.filler.connect audioContext.destination</pre></div>
+        
+      
+        
+        <p>Finally, the interval that calls the pitch detection function is started. It
+will be triggered <code>10</code> times a second.</p>
+
+        
+          <div class='highlight'><pre>    setInterval Tuner.PitchDetection.process, <span class="number">100</span></pre></div>
+        
+      
+        
+        <h3 id="error-">Error:</h3>
+<hr>
+<p>There are quite a few things that can go wrong with the connection, so for
+now it is just logged to the console.</p>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">error</span> = <span class="params">(e)</span> -&gt;</span>
+    console.error e</pre></div>
+        
+      
+        
+        <p>It is also worth having a global error logger, in case something goes wrong
+somewhere else.</p>
+
+        
+          <div class='highlight'><pre>  window.onerror = error
+
+  { init }</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

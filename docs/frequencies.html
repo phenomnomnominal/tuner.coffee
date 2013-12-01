@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>frequencies.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>frequencies.litcoffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="app.html">
+                    app.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="capabilities.html">
+                    capabilities.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="constants.html">
+                    constants.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="dataBuffer.html">
+                    dataBuffer.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="display.html">
+                    display.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="fft.html">
+                    fft.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="filters.html">
+                    filters.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="frequencies.html">
+                    frequencies.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="gauss.html">
+                    gauss.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="io.html">
+                    io.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="noiseRemoval.html">
+                    noiseRemoval.litcoffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="pitchDetection.html">
+                    pitchDetection.litcoffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2 id="frequency-utilities-">Frequency utilities:</h2>
+<hr>
+<p>The tuner needs to have the the ability to convert between frequencies and
+their note names.</p>
+
+        
+          <div class='highlight'><pre>Tuner.frequencyUtils = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+        
+      
+        
+        <h3 id="createfrequencies-">createFrequencies:</h3>
+<hr>
+<p>The following formula is used to create the actual frequencies that are
+mapped to the notes:</p>
+<blockquote>
+<p>   <img src="public/images/frequencyEq.png"/></p>
+</blockquote>
+<p>Where <code>49</code> is the index of the standard reference pitch (the A above middle
+C), and <code>n</code> is the pitch number relative to that.</p>
+
+        
+          <div class='highlight'><pre>  createFrequencies = <span class="keyword">do</span><span class="function"> -&gt;</span>
+    PITCH_NAMES = [<span class="string">"C"</span>, <span class="string">"C#"</span>, <span class="string">"D"</span>, <span class="string">"D#"</span>, <span class="string">"E"</span>, <span class="string">"F"</span>, <span class="string">"F#"</span>, <span class="string">"G"</span>, <span class="string">"G#"</span>, <span class="string">"A"</span>, <span class="string">"A#"</span>, <span class="string">"B"</span>]
+    OCTAVES = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</pre></div>
+        
+      
+        
+        <p>A default tuning pitch of 440Hz is used to generate pitches in A440 (Modern
+standard concert pitch). To start at <code>C1</code>, the <code>note</code> index starts at 4.</p>
+
+        
+          <div class='highlight'><pre>    <span class="function"><span class="params">(reference = Tuner.Constants.REFERENCE_PITCH)</span> -&gt;</span>
+      freqs = {}
+      note = <span class="number">4</span>
+      OCTAVES.forEach <span class="function"><span class="params">(octave)</span> -&gt;</span>
+        PITCH_NAMES.forEach <span class="function"><span class="params">(pitch)</span> -&gt;</span>
+          pitchName = pitch + octave
+          freqs[pitchName] = Math.pow(<span class="number">2</span>, (note++ - <span class="number">49</span>) / <span class="number">12</span>) * reference
+      freqs</pre></div>
+        
+      
+        
+        <h3 id="getpitch-">getPitch:</h3>
+<hr>
+<p>The <strong><code>getPitch</code></strong> function takes the current estimated frequency and finds the
+closest pitch to that frequency. It also returns the difference between the
+current frequency to the in-tune pitch of the note. This difference is used to
+find the number of <em>cents</em> - 1/100<sup>th</sup>s of a semi-tone - that a note
+is out of tune by, using the following formula:</p>
+<blockquote>
+<p>   <img src="public/images/centsEq.png"/></p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>  <span class="function"><span class="title">getPitch</span> = <span class="params">(freq, minDiff = Infinity)</span> -&gt;</span>
+    <span class="keyword">for</span> own key, val <span class="keyword">of</span> Tuner.frequencies
+      <span class="keyword">if</span> Math.abs(freq - val) &lt; minDiff
+        minDiff = Math.abs(freq - val)
+        diff = freq - val
+        rat = freq / val
+        note = key
+
+    cents = <span class="number">1200</span> * (Math.log(freq / Tuner.frequencies[note]) / Math.LN2)
+    [note, cents]
+
+  { createFrequencies, getPitch }</pre></div>
+        
+      
+        
+        <h2 id="frequencies-">frequencies:</h2>
+<hr>
+<p>Initially the set of standard pitches for the default of <code>A440Hz</code> tuning is
+created and assigned to the <strong><code>frequencies</code></strong> object.</p>
+
+        
+          <div class='highlight'><pre>Tuner.frequencies = Tuner.frequencyUtils.createFrequencies()</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
