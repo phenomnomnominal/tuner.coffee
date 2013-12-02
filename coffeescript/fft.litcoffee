@@ -11,7 +11,7 @@ is present in the original signal. This implementation is taken from
 [DSP]: https://github.com/corbanbrook/dsp.js/
 
     Tuner.FFT = do ->
-    
+
 ## FFT class:
 ___
 
@@ -27,7 +27,7 @@ input buffer and the sample rate of the signal, specifically:
 
 The **`FFT`** constructor creates a whole bunch of containers for creating
 the transformed frequency data.
- 
+
           @bandwidth = @sampleRate / @bufferSize
 
           @spectrum = new Float32Array(@bufferSize / 2)
@@ -69,12 +69,12 @@ the frequency-domain components of the signal.
           real = @real
           imag = @imag
           spectrum = @spectrum
-          
-          halfSize = 1          
+
+          halfSize = 1
           [0...bufferSize].forEach (i) ->
             real[i] = buffer[reverseTable[i]]
             imag[i] = 0
-            
+
           while halfSize < bufferSize
             pSSR = cosTable[halfSize]
             pSSI = sinTable[halfSize]

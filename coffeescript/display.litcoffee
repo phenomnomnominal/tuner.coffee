@@ -47,7 +47,7 @@ things a bit easier.
 
       $ = document.querySelector.bind document
       $.style = getComputedStyle.bind window
-      $.class = 
+      $.class =
         add: (selector) ->
           el = $ selector
           (names...) -> names.forEach (name) -> el.classList.add name
@@ -58,7 +58,7 @@ things a bit easier.
 ### init:
 ___
 
-      init = (containerSelector, theme = 'light') ->
+      init = (containerSelector, theme) ->
 
 **`init`** sets the `'tuner'` class on the container element, and sets the
 theme.
@@ -67,7 +67,7 @@ theme.
 
 #### Render:
 
-It then looks at the result of the capabilities test (the 
+It then looks at the result of the capabilities test (the
 `Tuner.mightWork` value), and inserts the correct template.
 
         if Tuner.mightWork
@@ -89,7 +89,7 @@ link.
           if canvas
             canvas.height = tunerHeight
             canvas.width = tunerWidth
-          
+
           $.class.remove(containerSelector) 'small', 'medium', 'large'
           if tunerWidth < 420
             size = 'small'
@@ -155,8 +155,8 @@ new elements for the note name.
               accidental.textContent = '#'
               name.appendChild accidental
 
-But then it gets a little bit gross when we have to update the `translateY` value.
-            
+But then it gets a little bit gross when the `translateY` value is updated.
+
             height = parseInt $.style($('.tuner')).height, 10
             marker.setProperty transform, "translateY(#{-(height / 2) * cents / 50}px)"
           else

@@ -2,7 +2,7 @@
 ___
 
     Tuner.PitchDetection = do ->
-    
+
 A few local references are made, for the sake of brevity.
 
       bandwidth = Tuner.Constants.SAMPLE_RATE / Tuner.Constants.FFTSIZE
@@ -21,7 +21,7 @@ steps:
 
       process = ->
 
-A copy is made of the buffer data
+A copy is made of the buffer data.
 
         bufferCopy = dataBuffer[0...dataBuffer.length]
 

@@ -13,7 +13,7 @@ very accurate frequency estimation.
 
 **`gauss`** is the actual window function, which is evaluated for a given
 position `i`, in a buffer of size `length`. The **`α`** value of the Gaussian
-is inversely proportional to the standard deviation of the function, meaning 
+is inversely proportional to the standard deviation of the function, meaning
 that the larger **`α`** is, the narrower the peak of the function is.
 
       gauss = (length, i, α = 0.5, pow = Math.pow, E = Math.E) ->

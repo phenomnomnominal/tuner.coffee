@@ -7,7 +7,7 @@ availability of these APIs. It should hopefully indicate whether the device has
 the features that are required for the tuner to work.
 
     Tuner.mightWork = do ->
-    
+
 ### AudioContext:
 ___
 

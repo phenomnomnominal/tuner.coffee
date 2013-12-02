@@ -60,7 +60,7 @@ is out of tune by, using the following formula:
 ## frequencies:
 ___
 
-Initially the set of standard pitches for the default of `A440Hz` tuning is
+Initially, the set of standard pitches for the default of `A440Hz` tuning is
 created and assigned to the **`frequencies`** object.
 
     Tuner.frequencies = Tuner.frequencyUtils.createFrequencies()

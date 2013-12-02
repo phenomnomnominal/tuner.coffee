@@ -9,8 +9,8 @@ the tuner.
 It also just happens to be a function that initialises the running
 and display of the tuner.
 
-      init = (containerSelector = '#Tuner') ->
-        Tuner.Display.init containerSelector
+      init = (containerSelector = '#Tuner', theme = 'light') ->
+        Tuner.Display.init containerSelector, theme
         if Tuner.mightWork
           Tuner.Input.init()
 

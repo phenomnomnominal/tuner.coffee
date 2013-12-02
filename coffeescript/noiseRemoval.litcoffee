@@ -30,5 +30,5 @@ The peak noise value from the initial second of data is set on the
 
         else
           Tuner.NoiseRemoval.limit = limit
-      
+
       { process }

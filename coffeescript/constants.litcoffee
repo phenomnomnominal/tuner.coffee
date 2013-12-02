@@ -8,7 +8,7 @@ ___
 
 * Audio Context - global instance of **`AudioContext`**
 * Sample rate - samples per second through the Web Audio API
-      
+
       audioContext = new AudioContext()
 
       AUDIO_CONTEXT: audioContext
@@ -18,7 +18,7 @@ ___
 ___
 
 * Low Pass Frequency - attenuation frequency for the low-pass filter.
-* High Pass Frequency - attenutation frequency for the high-pass filter.
+* High Pass Frequency - attenuation frequency for the high-pass filter.
 * Filter Q - cut-off frequency peak resonance.
 
       LOW_PASS_FREQUENCY: 4000
@@ -38,8 +38,6 @@ ___
 * FFT size - Fourier transform input buffer size.
 
       FFTSIZE: 8192
-
-
 
 ### Pitch constants:
 ___
