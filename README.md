@@ -10,7 +10,7 @@ You can see the full code documentation (made with [Docco][docco]) [here][docs]!
 
 ## How can I use it?
 
-Easy! Just grab the JS & CSS files from the **[github repo][github]** and include them in your page as follow:
+Easy! Just grab the JS & CSS files from the **[github repo][github]** and include them in your page as follows:
 
     <link rel='stylesheet' type='text/css' href='tuner.css'/>
     <script type='text/javascript' src='tuner.min.js'></script>
