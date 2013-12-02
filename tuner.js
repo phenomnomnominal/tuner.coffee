@@ -1,11 +1,14 @@
 (function() {
   (typeof exports !== "undefined" && exports !== null ? exports : this).Tuner = (function() {
     var init;
-    init = function(containerSelector) {
+    init = function(containerSelector, theme) {
       if (containerSelector == null) {
         containerSelector = '#Tuner';
       }
-      Tuner.Display.init(containerSelector);
+      if (theme == null) {
+        theme = 'light';
+      }
+      Tuner.Display.init(containerSelector, theme);
       if (Tuner.mightWork) {
         return Tuner.Input.init();
       }
@@ -128,9 +131,6 @@
     };
     init = function(containerSelector, theme) {
       var helpLink, resize;
-      if (theme == null) {
-        theme = 'light';
-      }
       $["class"].add(containerSelector)('tuner', theme);
       if (Tuner.mightWork) {
         $(containerSelector).innerHTML = Templates.MarkUp;

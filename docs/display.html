@@ -165,7 +165,7 @@ things a bit easier.</p>
         
           <div class='highlight'><pre>  $ = document.querySelector.bind <span class="built_in">document</span>
   $.style = getComputedStyle.bind <span class="built_in">window</span>
-  $.<span class="class"><span class="keyword">class</span> = </span>
+  $.<span class="class"><span class="keyword">class</span> =</span>
     <span class="attribute">add</span>: <span class="function"><span class="params">(selector)</span> -&gt;</span>
       el = $ selector
       <span class="function"><span class="params">(names...)</span> -&gt;</span> names.forEach <span class="function"><span class="params">(name)</span> -&gt;</span> el.classList.add name
@@ -179,7 +179,7 @@ things a bit easier.</p>
 <hr>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = <span class="params">(containerSelector, theme = <span class="string">'light'</span>)</span> -&gt;</span></pre></div>
+          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = <span class="params">(containerSelector, theme)</span> -&gt;</span></pre></div>
         
       
         
@@ -192,7 +192,7 @@ theme.</p>
       
         
         <h4 id="render-">Render:</h4>
-<p>It then looks at the result of the capabilities test (the 
+<p>It then looks at the result of the capabilities test (the
 <code>Tuner.mightWork</code> value), and inserts the correct template.</p>
 
         
@@ -291,7 +291,7 @@ new elements for the note name.</p>
         
       
         
-        <p>But then it gets a little bit gross when we have to update the <code>translateY</code> value.</p>
+        <p>But then it gets a little bit gross when the <code>translateY</code> value is updated.</p>
 
         
           <div class='highlight'><pre>        height = parseInt $.style($(<span class="string">'.tuner'</span>)).height, <span class="number">10</span>
