@@ -13,12 +13,6 @@
       "email": "maxime.michel@gmail.com"
     }
   ],
-  "scripts": {
-    "start": "node ./bin/http-server",
-    "test": "vows --spec --isolate",
-    "predeploy": "echo This will be run before deploying the app",
-    "postdeploy": "echo This will be run after deploying the app"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/phenomnomnominal/tuner.coffee.git"
@@ -40,6 +34,5 @@
     "grunt-devserver": "~0.5.0",
     "grunt-concurrent": "~0.4.2",
     "grunt-contrib-sass": "~0.5.1"
-  },
-  "license": "MIT"
+  }
 }
