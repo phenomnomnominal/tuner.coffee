@@ -13,6 +13,10 @@
         return Tuner.Input.init();
       }
     };
+    init.destroy = function() {
+      Tuner.Input.destroy();
+      return Tuner.Display.destroy();
+    };
     return init;
   })();
 
@@ -97,7 +101,7 @@
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Tuner.Display = (function() {
-    var $, REPO_URL, Templates, init, update;
+    var $, REPO_URL, Templates, container, destroy, init, update;
     REPO_URL = 'https://github.com/phenomnomnominal/tuner.coffee';
     Templates = {
       MarkUp: "<canvas></canvas>\n<div class='target'></div>\n<div class='dial'>\n  <div class='marker'></div>\n</div>\n<div class='note'>\n  <div class='name'></div>\n</div>\n<div class='help'>\n  <a href='" + REPO_URL + "' target='_blank'>?</a>\n</div>",
@@ -129,17 +133,19 @@
         };
       }
     };
+    container = null;
     init = function(containerSelector, theme) {
       var helpLink, resize;
       $["class"].add(containerSelector)('tuner', theme);
+      container = $(containerSelector);
       if (Tuner.mightWork) {
-        $(containerSelector).innerHTML = Templates.MarkUp;
+        container.innerHTML = Templates.MarkUp;
       } else {
-        $(containerSelector).innerHTML = Templates.Fallback;
+        container.innerHTML = Templates.Fallback;
       }
       resize = function() {
         var canvas, size, tunerHeight, tunerStyle, tunerWidth;
-        tunerStyle = $.style($(containerSelector));
+        tunerStyle = $.style(container);
         tunerHeight = parseInt(tunerStyle.height, 10);
         tunerWidth = parseInt(tunerStyle.width, 10);
         canvas = $('canvas');
@@ -241,9 +247,15 @@
         return updateCanvas(buffer);
       };
     })();
+    destroy = function() {
+      if (container) {
+        return container.innerHTML = '';
+      }
+    };
     return {
       init: init,
-      update: update
+      update: update,
+      destroy: destroy
     };
   })();
 
@@ -479,28 +491,38 @@
 
 (function() {
   Tuner.Input = (function() {
-    var error, init, success;
+    var destroy, error, init, processInterval, stream, success;
+    stream = null;
+    processInterval = null;
     init = function() {
       return navigator.getUserMedia({
         audio: true
       }, success, error);
     };
-    success = function(stream) {
+    destroy = function() {
+      if (stream && processInterval) {
+        stream.stop();
+        return clearInterval(processInterval);
+      }
+    };
+    success = function(dataStream) {
       var audioContext, src;
+      stream = dataStream;
       audioContext = Tuner.Constants.AUDIO_CONTEXT;
       src = audioContext.createMediaStreamSource(stream);
       src.connect(Tuner.Filter.LP);
       Tuner.Filter.LP.connect(Tuner.Filter.HP);
       Tuner.Filter.HP.connect(Tuner.DataBuffer.filler);
       Tuner.DataBuffer.filler.connect(audioContext.destination);
-      return setInterval(Tuner.PitchDetection.process, 100);
+      return processInterval = setInterval(Tuner.PitchDetection.process, 100);
     };
     error = function(e) {
       return console.error(e);
     };
     window.onerror = error;
     return {
-      init: init
+      init: init,
+      destroy: destroy
     };
   })();
 

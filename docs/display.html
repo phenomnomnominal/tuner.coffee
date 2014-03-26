@@ -118,8 +118,8 @@
 with the user.</p>
 
         
-          <div class='highlight'><pre>Tuner.Display = <span class="keyword">do</span><span class="function"> -&gt;</span>
-  REPO_URL = <span class="string">'https://github.com/phenomnomnominal/tuner.coffee'</span></pre></div>
+          <div class='highlight'><pre>Tuner.Display = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+  REPO_URL = <span class="hljs-string">'https://github.com/phenomnomnominal/tuner.coffee'</span></pre></div>
         
       
         
@@ -130,7 +130,7 @@ empty container, all the mark-up for the UI must be contained internally:</p>
 
         
           <div class='highlight'><pre>  Templates =
-      <span class="attribute">MarkUp</span>: <span class="string">"""
+      <span class="hljs-attribute">MarkUp</span>: <span class="hljs-string">"""
               &lt;canvas&gt;&lt;/canvas&gt;
               &lt;div class='target'&gt;&lt;/div&gt;
               &lt;div class='dial'&gt;
@@ -140,10 +140,10 @@ empty container, all the mark-up for the UI must be contained internally:</p>
                 &lt;div class='name'&gt;&lt;/div&gt;
               &lt;/div&gt;
               &lt;div class='help'&gt;
-                &lt;a href='<span class="subst">#{REPO_URL}</span>' target='_blank'&gt;?&lt;/a&gt;
+                &lt;a href='<span class="hljs-subst">#{REPO_URL}</span>' target='_blank'&gt;?&lt;/a&gt;
               &lt;/div&gt;
               """</span>
-      <span class="attribute">Fallback</span>: <span class="string">"""
+      <span class="hljs-attribute">Fallback</span>: <span class="hljs-string">"""
                 &lt;div class='sorry'&gt;
                   &lt;div&gt;
                     &lt;h1&gt;Sorry...&lt;/h1&gt;
@@ -151,7 +151,7 @@ empty container, all the mark-up for the UI must be contained internally:</p>
                   &lt;/div&gt;
                 &lt;/div&gt;
                 &lt;div class='help'&gt;
-                  &lt;a href='<span class="subst">#{REPO_URL}</span>' target='_blank'&gt;?&lt;/a&gt;
+                  &lt;a href='<span class="hljs-subst">#{REPO_URL}</span>' target='_blank'&gt;?&lt;/a&gt;
                 &lt;/div&gt;
                 """</span></pre></div>
         
@@ -163,15 +163,15 @@ empty container, all the mark-up for the UI must be contained internally:</p>
 things a bit easier.</p>
 
         
-          <div class='highlight'><pre>  $ = document.querySelector.bind <span class="built_in">document</span>
-  $.style = getComputedStyle.bind <span class="built_in">window</span>
-  $.<span class="class"><span class="keyword">class</span> =</span>
-    <span class="attribute">add</span>: <span class="function"><span class="params">(selector)</span> -&gt;</span>
+          <div class='highlight'><pre>  $ = <span class="hljs-built_in">document</span>.querySelector.bind <span class="hljs-built_in">document</span>
+  $.style = getComputedStyle.bind <span class="hljs-built_in">window</span>
+  $.class =
+    <span class="hljs-attribute">add</span>: <span class="hljs-function"><span class="hljs-params">(selector)</span> -&gt;</span>
       el = $ selector
-      <span class="function"><span class="params">(names...)</span> -&gt;</span> names.forEach <span class="function"><span class="params">(name)</span> -&gt;</span> el.classList.add name
-    <span class="attribute">remove</span>: <span class="function"><span class="params">(selector)</span> -&gt;</span>
+      <span class="hljs-function"><span class="hljs-params">(names...)</span> -&gt;</span> names.forEach <span class="hljs-function"><span class="hljs-params">(name)</span> -&gt;</span> el.classList.add name
+    <span class="hljs-attribute">remove</span>: <span class="hljs-function"><span class="hljs-params">(selector)</span> -&gt;</span>
       el = $ selector
-      <span class="function"><span class="params">(names...)</span> -&gt;</span> names.forEach <span class="function"><span class="params">(name)</span> -&gt;</span> el.classList.remove name</pre></div>
+      <span class="hljs-function"><span class="hljs-params">(names...)</span> -&gt;</span> names.forEach <span class="hljs-function"><span class="hljs-params">(name)</span> -&gt;</span> el.classList.remove name</pre></div>
         
       
         
@@ -179,7 +179,8 @@ things a bit easier.</p>
 <hr>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = <span class="params">(containerSelector, theme)</span> -&gt;</span></pre></div>
+          <div class='highlight'><pre>  container = <span class="hljs-literal">null</span>
+  <span class="hljs-function"><span class="hljs-title">init</span> = <span class="hljs-params">(containerSelector, theme)</span> -&gt;</span></pre></div>
         
       
         
@@ -187,7 +188,7 @@ things a bit easier.</p>
 theme.</p>
 
         
-          <div class='highlight'><pre>    $.class.add(containerSelector) <span class="string">'tuner'</span>, theme</pre></div>
+          <div class='highlight'><pre>    $.class.add(containerSelector) <span class="hljs-string">'tuner'</span>, theme</pre></div>
         
       
         
@@ -196,10 +197,11 @@ theme.</p>
 <code>Tuner.mightWork</code> value), and inserts the correct template.</p>
 
         
-          <div class='highlight'><pre>    <span class="keyword">if</span> Tuner.mightWork
-      $(containerSelector).innerHTML = Templates.MarkUp
-    <span class="keyword">else</span>
-      $(containerSelector).innerHTML = Templates.Fallback</pre></div>
+          <div class='highlight'><pre>    container = $(containerSelector)
+    <span class="hljs-keyword">if</span> Tuner.mightWork
+      container.innerHTML = Templates.MarkUp
+    <span class="hljs-keyword">else</span>
+      container.innerHTML = Templates.Fallback</pre></div>
         
       
         
@@ -209,30 +211,30 @@ that the <code>&lt;canvas&gt;</code> is the right size), and the <code>&#39;hove
 link.</p>
 
         
-          <div class='highlight'><pre>    <span class="function"><span class="title">resize</span> = -&gt;</span>
-      tunerStyle = $.style $(containerSelector)
-      tunerHeight = parseInt tunerStyle.height, <span class="number">10</span>
-      tunerWidth = parseInt tunerStyle.width, <span class="number">10</span>
-      canvas = $ <span class="string">'canvas'</span>
-      <span class="keyword">if</span> canvas
+          <div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-title">resize</span> = -&gt;</span>
+      tunerStyle = $.style container
+      tunerHeight = parseInt tunerStyle.height, <span class="hljs-number">10</span>
+      tunerWidth = parseInt tunerStyle.width, <span class="hljs-number">10</span>
+      canvas = $ <span class="hljs-string">'canvas'</span>
+      <span class="hljs-keyword">if</span> canvas
         canvas.height = tunerHeight
         canvas.width = tunerWidth
 
-      $.class.remove(containerSelector) <span class="string">'small'</span>, <span class="string">'medium'</span>, <span class="string">'large'</span>
-      <span class="keyword">if</span> tunerWidth &lt; <span class="number">420</span>
-        size = <span class="string">'small'</span>
-      <span class="keyword">if</span> <span class="number">420</span> &lt;= tunerWidth &lt; <span class="number">820</span>
-        size = <span class="string">'medium'</span>
-      <span class="keyword">if</span> <span class="number">820</span> &lt;= tunerWidth
-        size = <span class="string">'large'</span>
+      $.class.remove(containerSelector) <span class="hljs-string">'small'</span>, <span class="hljs-string">'medium'</span>, <span class="hljs-string">'large'</span>
+      <span class="hljs-keyword">if</span> tunerWidth &lt; <span class="hljs-number">420</span>
+        size = <span class="hljs-string">'small'</span>
+      <span class="hljs-keyword">if</span> <span class="hljs-number">420</span> &lt;= tunerWidth &lt; <span class="hljs-number">820</span>
+        size = <span class="hljs-string">'medium'</span>
+      <span class="hljs-keyword">if</span> <span class="hljs-number">820</span> &lt;= tunerWidth
+        size = <span class="hljs-string">'large'</span>
       $.class.add(containerSelector) size
 
-    addEventListener <span class="string">'resize'</span>, resize
+    addEventListener <span class="hljs-string">'resize'</span>, resize
     resize()
 
-    helpLink = $ <span class="string">'.help a'</span>
-    helpLink.addEventListener <span class="string">'mouseover'</span>,<span class="function"> -&gt;</span> helpLink.innerText = <span class="string">'tuner.coffee'</span>
-    helpLink.addEventListener <span class="string">'mouseout'</span>,<span class="function"> -&gt;</span> helpLink.innerText = <span class="string">'?'</span></pre></div>
+    helpLink = $ <span class="hljs-string">'.help a'</span>
+    helpLink.addEventListener <span class="hljs-string">'mouseover'</span>,<span class="hljs-function"> -&gt;</span> helpLink.innerText = <span class="hljs-string">'tuner.coffee'</span>
+    helpLink.addEventListener <span class="hljs-string">'mouseout'</span>,<span class="hljs-function"> -&gt;</span> helpLink.innerText = <span class="hljs-string">'?'</span></pre></div>
         
       
         
@@ -244,7 +246,7 @@ link.</p>
 removed, and the centre marker needs to be offset by the right number of cents.</p>
 
         
-          <div class='highlight'><pre>  update = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>  update = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -252,18 +254,18 @@ removed, and the centre marker needs to be offset by the right number of cents.<
 a little bit of black magic to get the right prefix:</p>
 
         
-          <div class='highlight'><pre>    transform = <span class="keyword">do</span><span class="function"> -&gt;</span>
-      style = $.style document.documentElement
+          <div class='highlight'><pre>    transform = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+      style = $.style <span class="hljs-built_in">document</span>.documentElement
       spellings = [
-        <span class="string">'transform'</span>,
-        <span class="string">'-moz-transform'</span>, <span class="string">'mozTransform'</span>, <span class="string">'MozTransform'</span>,
-        <span class="string">'-webkit-transform'</span>, <span class="string">'webkitTransform'</span>, <span class="string">'WebkitTransform'</span>,
-        <span class="string">'-o-transform'</span>, <span class="string">'oTransform'</span>, <span class="string">'OTransform'</span>,
-        <span class="string">'-ms-transform'</span>, <span class="string">'msTransform'</span>, <span class="string">'MsTransform'</span>
+        <span class="hljs-string">'transform'</span>,
+        <span class="hljs-string">'-moz-transform'</span>, <span class="hljs-string">'mozTransform'</span>, <span class="hljs-string">'MozTransform'</span>,
+        <span class="hljs-string">'-webkit-transform'</span>, <span class="hljs-string">'webkitTransform'</span>, <span class="hljs-string">'WebkitTransform'</span>,
+        <span class="hljs-string">'-o-transform'</span>, <span class="hljs-string">'oTransform'</span>, <span class="hljs-string">'OTransform'</span>,
+        <span class="hljs-string">'-ms-transform'</span>, <span class="hljs-string">'msTransform'</span>, <span class="hljs-string">'MsTransform'</span>
       ]
-      <span class="keyword">for</span> spelling <span class="keyword">in</span> spellings
-        <span class="keyword">if</span> {}.hasOwnProperty.call(style, spelling) <span class="keyword">or</span> style[spelling]?
-          <span class="keyword">return</span> spelling</pre></div>
+      <span class="hljs-keyword">for</span> spelling <span class="hljs-keyword">in</span> spellings
+        <span class="hljs-keyword">if</span> {}.hasOwnProperty.call(style, spelling) <span class="hljs-keyword">or</span> style[spelling]?
+          <span class="hljs-keyword">return</span> spelling</pre></div>
         
       
         
@@ -271,22 +273,22 @@ a little bit of black magic to get the right prefix:</p>
 new elements for the note name.</p>
 
         
-          <div class='highlight'><pre>    <span class="function"><span class="title">updateHTML</span> = <span class="params">(buffer, pitch, cents)</span> -&gt;</span>
-      $.class.remove(<span class="string">'.tuner'</span>) <span class="string">'tuned'</span>, <span class="string">'untuned'</span>
-      name = $ <span class="string">'.name'</span>
-      marker = $(<span class="string">'.marker'</span>).style
-      name.innerHTML = <span class="string">''</span>
-      <span class="keyword">if</span> pitch? <span class="keyword">and</span> cents?
-        <span class="keyword">if</span> Math.abs(cents) &lt; <span class="number">4</span>
-          $.class.add(<span class="string">'.tuner'</span>) <span class="string">'tuned'</span>
-        <span class="keyword">else</span>
-          $.class.add(<span class="string">'.tuner'</span>) <span class="string">'untuned'</span>
-        letter = document.createElement <span class="string">'span'</span>
-        letter.textContent = pitch.substr <span class="number">0</span>, <span class="number">1</span>
+          <div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-title">updateHTML</span> = <span class="hljs-params">(buffer, pitch, cents)</span> -&gt;</span>
+      $.class.remove(<span class="hljs-string">'.tuner'</span>) <span class="hljs-string">'tuned'</span>, <span class="hljs-string">'untuned'</span>
+      name = $ <span class="hljs-string">'.name'</span>
+      marker = $(<span class="hljs-string">'.marker'</span>).style
+      name.innerHTML = <span class="hljs-string">''</span>
+      <span class="hljs-keyword">if</span> pitch? <span class="hljs-keyword">and</span> cents?
+        <span class="hljs-keyword">if</span> Math.abs(cents) &lt; <span class="hljs-number">4</span>
+          $.class.add(<span class="hljs-string">'.tuner'</span>) <span class="hljs-string">'tuned'</span>
+        <span class="hljs-keyword">else</span>
+          $.class.add(<span class="hljs-string">'.tuner'</span>) <span class="hljs-string">'untuned'</span>
+        letter = <span class="hljs-built_in">document</span>.createElement <span class="hljs-string">'span'</span>
+        letter.textContent = pitch.substr <span class="hljs-number">0</span>, <span class="hljs-number">1</span>
         name.appendChild letter
-        <span class="keyword">if</span> <span class="string">'#'</span> <span class="keyword">in</span> pitch
-          accidental = document.createElement <span class="string">'sup'</span>
-          accidental.textContent = <span class="string">'#'</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-string">'#'</span> <span class="hljs-keyword">in</span> pitch
+          accidental = <span class="hljs-built_in">document</span>.createElement <span class="hljs-string">'sup'</span>
+          accidental.textContent = <span class="hljs-string">'#'</span>
           name.appendChild accidental</pre></div>
         
       
@@ -294,10 +296,10 @@ new elements for the note name.</p>
         <p>But then it gets a little bit gross when the <code>translateY</code> value is updated.</p>
 
         
-          <div class='highlight'><pre>        height = parseInt $.style($(<span class="string">'.tuner'</span>)).height, <span class="number">10</span>
-        marker.setProperty transform, <span class="string">"translateY(<span class="subst">#{-(height / <span class="number">2</span>) * cents / <span class="number">50</span>}</span>px)"</span>
-      <span class="keyword">else</span>
-        marker.setProperty transform, <span class="string">"translateY(0px)"</span></pre></div>
+          <div class='highlight'><pre>        height = parseInt $.style($(<span class="hljs-string">'.tuner'</span>)).height, <span class="hljs-number">10</span>
+        marker.setProperty transform, <span class="hljs-string">"translateY(<span class="hljs-subst">#{-(height / <span class="hljs-number">2</span>) * cents / <span class="hljs-number">50</span>}</span>px)"</span>
+      <span class="hljs-keyword">else</span>
+        marker.setProperty transform, <span class="hljs-string">"translateY(0px)"</span></pre></div>
         
       
         
@@ -308,21 +310,21 @@ new elements for the note name.</p>
 <code>&lt;canvas&gt;</code>.</p>
 
         
-          <div class='highlight'><pre>    timeMax = <span class="number">0</span>
-    <span class="function"><span class="title">updateCanvas</span> = <span class="params">(buffer)</span> -&gt;</span>
-      canvas = $ <span class="string">'canvas'</span>
-      context = canvas.getContext <span class="string">'2d'</span>
-      context.clearRect <span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height
-      max = buffer.reduce <span class="function"><span class="params">(max = <span class="number">0</span>, next)</span> -&gt;</span> 
-        <span class="keyword">if</span> Math.abs(next) &gt; max <span class="keyword">then</span> Math.abs(next) <span class="keyword">else</span> max
-      timeMax = <span class="keyword">if</span> max &gt; timeMax <span class="keyword">then</span> max <span class="keyword">else</span> timeMax
+          <div class='highlight'><pre>    timeMax = <span class="hljs-number">0</span>
+    <span class="hljs-function"><span class="hljs-title">updateCanvas</span> = <span class="hljs-params">(buffer)</span> -&gt;</span>
+      canvas = $ <span class="hljs-string">'canvas'</span>
+      context = canvas.getContext <span class="hljs-string">'2d'</span>
+      context.clearRect <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, canvas.width, canvas.height
+      max = buffer.reduce <span class="hljs-function"><span class="hljs-params">(max = <span class="hljs-number">0</span>, next)</span> -&gt;</span> 
+        <span class="hljs-keyword">if</span> Math.abs(next) &gt; max <span class="hljs-keyword">then</span> Math.abs(next) <span class="hljs-keyword">else</span> max
+      timeMax = <span class="hljs-keyword">if</span> max &gt; timeMax <span class="hljs-keyword">then</span> max <span class="hljs-keyword">else</span> timeMax
       timeHeight = canvas.height / buffer.length
-      context.fillStyle = <span class="string">'#A5C7FD'</span>
-      <span class="keyword">for</span> s <span class="keyword">in</span> [<span class="number">0.</span>..buffer.length]
+      context.fillStyle = <span class="hljs-string">'#A5C7FD'</span>
+      <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>..buffer.length]
         y = timeHeight * s
-        width = (canvas.width / <span class="number">3</span>) * (buffer[s] / timeMax)
-        x = canvas.width / <span class="number">2</span>
-        context.fillRect x, y, width, <span class="number">0.5</span></pre></div>
+        width = (canvas.width / <span class="hljs-number">3</span>) * (buffer[s] / timeMax)
+        x = canvas.width / <span class="hljs-number">2</span>
+        context.fillRect x, y, width, <span class="hljs-number">0.5</span></pre></div>
         
       
         
@@ -331,11 +333,22 @@ new elements for the note name.</p>
 the <strong><code>updateCanvas</code></strong> function.</p>
 
         
-          <div class='highlight'><pre>    <span class="function"><span class="title">update</span> = <span class="params">(buffer, pitch, cents)</span>-&gt;</span>
+          <div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-title">update</span> = <span class="hljs-params">(buffer, pitch, cents)</span>-&gt;</span>
       updateHTML buffer, pitch, cents
-      updateCanvas buffer
+      updateCanvas buffer</pre></div>
+        
+      
+        
+        <h3 id="destroy-">destroy:</h3>
+<p>The <strong><code>destroy</code></strong> function just clears the contents of the tuner container
+element.</p>
 
-  { init, update }</pre></div>
+        
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">destroy</span> = -&gt;</span>
+    <span class="hljs-keyword">if</span> container
+      container.innerHTML = <span class="hljs-string">''</span>
+
+  { init, update, destroy }</pre></div>
         
       
       <div class="fleur">h</div>

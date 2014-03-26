@@ -27,6 +27,12 @@ You need to call the function in your own JS file - or just directly on the page
 
 This will create the tuner in your page, and ask the user for permission to use their microphone.
 
+You can also destroy the Tuner (and remove the contents of the element that it was created in) by calling:
+
+    <script>
+        Tuner.destroy();
+    </script>
+
 It can be seen in action [here][tuner].
 
 ## What browsers does this work in?

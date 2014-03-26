@@ -118,19 +118,34 @@
 microphone, and using the other modules to perform real-time pitch detection.</p>
 
         
-          <div class='highlight'><pre>Tuner.Input = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.Input = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+  stream = <span class="hljs-literal">null</span>
+  processInterval = <span class="hljs-literal">null</span></pre></div>
         
       
         
         <h3 id="init-">init:</h3>
 <hr>
 <p>Everything starts with the call to <code>getUserMedia</code>. Passing in <code>{ audio: true }</code>
-sets up the connection to the users microphone, and the <code>success</code> or <code>error</code>
+sets up the connection to the user’s microphone, and the <code>success</code> or <code>error</code>
 callback will be triggered depending on the result.</p>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = -&gt;</span>
-    navigator.getUserMedia <span class="attribute">audio</span>: <span class="literal">true</span>, success, error</pre></div>
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">init</span> = -&gt;</span>
+    navigator.getUserMedia <span class="hljs-attribute">audio</span>: <span class="hljs-literal">true</span>, success, error</pre></div>
+        
+      
+        
+        <h3 id="destroy-">destroy:</h3>
+<hr>
+<p>There also needs to be a way to destroy the connection to the microphone and stop
+the <code>Tuner.PitchDetection.process</code> timeout.</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">destroy</span> = -&gt;</span>
+    <span class="hljs-keyword">if</span> stream <span class="hljs-keyword">and</span> processInterval
+      stream.stop()
+      clearInterval processInterval</pre></div>
         
       
         
@@ -138,7 +153,7 @@ callback will be triggered depending on the result.</p>
 <hr>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">success</span> = <span class="params">(stream)</span> -&gt;</span></pre></div>
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">success</span> = <span class="hljs-params">(dataStream)</span> -&gt;</span></pre></div>
         
       
         
@@ -150,7 +165,8 @@ destination, but as the <code>dataBuffer</code> does not create any output, no a
 sound is played.</p>
 
         
-          <div class='highlight'><pre>    audioContext = Tuner.Constants.AUDIO_CONTEXT
+          <div class='highlight'><pre>    stream = dataStream
+    audioContext = Tuner.Constants.AUDIO_CONTEXT
     src = audioContext.createMediaStreamSource stream
     src.connect Tuner.Filter.LP
     Tuner.Filter.LP.connect Tuner.Filter.HP
@@ -163,18 +179,18 @@ sound is played.</p>
 will be triggered <code>10</code> times a second.</p>
 
         
-          <div class='highlight'><pre>    setInterval Tuner.PitchDetection.process, <span class="number">100</span></pre></div>
+          <div class='highlight'><pre>    processInterval = setInterval Tuner.PitchDetection.process, <span class="hljs-number">100</span></pre></div>
         
       
         
-        <h3 id="error-">Error:</h3>
+        <h3 id="error-handling-">Error handling:</h3>
 <hr>
 <p>There are quite a few things that can go wrong with the connection, so for
 now it is just logged to the console.</p>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">error</span> = <span class="params">(e)</span> -&gt;</span>
-    console.error e</pre></div>
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">error</span> = <span class="hljs-params">(e)</span> -&gt;</span>
+    <span class="hljs-built_in">console</span>.error e</pre></div>
         
       
         
@@ -182,9 +198,9 @@ now it is just logged to the console.</p>
 somewhere else.</p>
 
         
-          <div class='highlight'><pre>  window.onerror = error
+          <div class='highlight'><pre>  <span class="hljs-built_in">window</span>.onerror = error
 
-  { init }</pre></div>
+  { init, destroy }</pre></div>
         
       
       <div class="fleur">h</div>

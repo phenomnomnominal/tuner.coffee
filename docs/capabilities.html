@@ -120,7 +120,7 @@ availability of these APIs. It should hopefully indicate whether the device has
 the features that are required for the tuner to work.</p>
 
         
-          <div class='highlight'><pre>Tuner.mightWork = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.mightWork = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -131,12 +131,12 @@ interface to the <strong><a href="https://dvcs.w3.org/hg/audio/raw-file/tip/weba
 manipulate audio data from JavaScript.</p>
 
         
-          <div class='highlight'><pre>  window.AudioContext = <span class="keyword">do</span><span class="function"> -&gt;</span>
-    window.AudioContext <span class="keyword">or</span>
-    window.mozAudioContext <span class="keyword">or</span>
-    window.webkitAudioContext <span class="keyword">or</span>
-    window.msAudioContext <span class="keyword">or</span>
-    window.oAudioContext</pre></div>
+          <div class='highlight'><pre>  <span class="hljs-built_in">window</span>.AudioContext = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+    <span class="hljs-built_in">window</span>.AudioContext <span class="hljs-keyword">or</span>
+    <span class="hljs-built_in">window</span>.mozAudioContext <span class="hljs-keyword">or</span>
+    <span class="hljs-built_in">window</span>.webkitAudioContext <span class="hljs-keyword">or</span>
+    <span class="hljs-built_in">window</span>.msAudioContext <span class="hljs-keyword">or</span>
+    <span class="hljs-built_in">window</span>.oAudioContext</pre></div>
         
       
         
@@ -144,8 +144,8 @@ manipulate audio data from JavaScript.</p>
 normalised.</p>
 
         
-          <div class='highlight'><pre>  AudioContext.prototype.createScriptProcessor = <span class="keyword">do</span><span class="function"> -&gt;</span>
-    AudioContext.prototype.createScriptProcessor <span class="keyword">or</span>
+          <div class='highlight'><pre>  AudioContext.prototype.createScriptProcessor = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+    AudioContext.prototype.createScriptProcessor <span class="hljs-keyword">or</span>
     AudioContext.prototype.createJavaScriptNode</pre></div>
         
       
@@ -157,11 +157,11 @@ the browser to have access to the data-stream from any audio or video inputs
 on the device.</p>
 
         
-          <div class='highlight'><pre>  navigator.getUserMedia = <span class="keyword">do</span><span class="function"> -&gt;</span>
-    navigator.getUserMedia <span class="keyword">or</span>
-    navigator.mozGetUserMedia <span class="keyword">or</span>
-    navigator.webkitGetUserMedia <span class="keyword">or</span>
-    navigator.msGetUserMedia <span class="keyword">or</span>
+          <div class='highlight'><pre>  navigator.getUserMedia = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+    navigator.getUserMedia <span class="hljs-keyword">or</span>
+    navigator.mozGetUserMedia <span class="hljs-keyword">or</span>
+    navigator.webkitGetUserMedia <span class="hljs-keyword">or</span>
+    navigator.msGetUserMedia <span class="hljs-keyword">or</span>
     navigator.oGetUserMedia</pre></div>
         
       
@@ -171,7 +171,7 @@ are available then there is a reasonable chance that the tuner will work -
 there are still probably going to be false positives though!</p>
 
         
-          <div class='highlight'><pre>  mightWork = window.AudioContext <span class="keyword">and</span> navigator.getUserMedia</pre></div>
+          <div class='highlight'><pre>  mightWork = <span class="hljs-built_in">window</span>.AudioContext <span class="hljs-keyword">and</span> navigator.getUserMedia</pre></div>
         
       
       <div class="fleur">h</div>

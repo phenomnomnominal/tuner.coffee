@@ -14,4 +14,11 @@ and display of the tuner.
         if Tuner.mightWork
           Tuner.Input.init()
 
+It has a function attached to it that will stop the tuner running and clear the
+UI.
+
+      init.destroy = ->
+        Tuner.Input.destroy()
+        Tuner.Display.destroy()
+
       init

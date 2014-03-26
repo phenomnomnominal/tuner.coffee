@@ -1,6 +1,6 @@
 {
   "name": "tuner.coffee",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "phenomnomnominal <craigspence0@gmail.com>",
   "description": "A guitar tuner using getUserMedia + Web Audio API",
   "contributors": [

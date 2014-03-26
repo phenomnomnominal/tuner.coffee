@@ -58,6 +58,7 @@ things a bit easier.
 ### init:
 ___
 
+      container = null
       init = (containerSelector, theme) ->
 
 **`init`** sets the `'tuner'` class on the container element, and sets the
@@ -70,10 +71,11 @@ theme.
 It then looks at the result of the capabilities test (the
 `Tuner.mightWork` value), and inserts the correct template.
 
+        container = $(containerSelector)
         if Tuner.mightWork
-          $(containerSelector).innerHTML = Templates.MarkUp
+          container.innerHTML = Templates.MarkUp
         else
-          $(containerSelector).innerHTML = Templates.Fallback
+          container.innerHTML = Templates.Fallback
 
 #### Event Listeners:
 
@@ -82,7 +84,7 @@ that the `<canvas>` is the right size), and the `'hover'` event for the help
 link.
 
         resize = ->
-          tunerStyle = $.style $(containerSelector)
+          tunerStyle = $.style container
           tunerHeight = parseInt tunerStyle.height, 10
           tunerWidth = parseInt tunerStyle.width, 10
           canvas = $ 'canvas'
@@ -195,4 +197,13 @@ the **`updateCanvas`** function.
           updateHTML buffer, pitch, cents
           updateCanvas buffer
 
-      { init, update }
+### destroy:
+
+The **`destroy`** function just clears the contents of the tuner container
+element.
+
+      destroy = ->
+        if container
+          container.innerHTML = ''
+
+      { init, update, destroy }

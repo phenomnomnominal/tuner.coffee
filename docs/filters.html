@@ -118,7 +118,7 @@
 any frequencies outside of that range can be ignored.</p>
 
         
-          <div class='highlight'><pre>Tuner.Filter = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.Filter = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -127,7 +127,7 @@ any frequencies outside of that range can be ignored.</p>
 <p>A <strong><a href="http://en.wikipedia.org/wiki/Low-pass_filter">low-pass filter</a></strong> is also used to attenuate frequencies above <code>4kHz</code>.</p>
 
         
-          <div class='highlight'><pre>  LP = <span class="keyword">do</span><span class="function"> -&gt;</span>
+          <div class='highlight'><pre>  LP = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
     lp = Tuner.Constants.AUDIO_CONTEXT.createBiquadFilter()
     lp.type = lp.LOWPASS
     lp.frequency = Tuner.Constants.LOW_PASS_FREQUENCY
@@ -142,7 +142,7 @@ any frequencies outside of that range can be ignored.</p>
 they are outside the frequency response of most basic microphones anyway.</p>
 
         
-          <div class='highlight'><pre>  HP = <span class="keyword">do</span><span class="function"> -&gt;</span>
+          <div class='highlight'><pre>  HP = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
     hp = Tuner.Constants.AUDIO_CONTEXT.createBiquadFilter()
     hp.type = hp.HIGHPASS
     hp.frequency = Tuner.Constants.HIGH_PASS_FREQUENCY

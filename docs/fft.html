@@ -117,10 +117,10 @@
 <p>The <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">Fast Fourier Transform</a> is a fast method of converting time-domain
 audio data into frequency-domain values for the amount of each frequency that
 is present in the original signal. This implementation is taken from
-<a href="https://twitter.com/corban">Corban Brook</a>&#39;s <a href="https://github.com/corbanbrook/dsp.js/">dsp.js</a> (thanks!).</p>
+<a href="https://twitter.com/corban">Corban Brook</a>‘s <a href="https://github.com/corbanbrook/dsp.js/">dsp.js</a> (thanks!).</p>
 
         
-          <div class='highlight'><pre>Tuner.FFT = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.FFT = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -136,8 +136,8 @@ input buffer and the sample rate of the signal, specifically:</p>
 </ul>
 
         
-          <div class='highlight'><pre>  <span class="class"><span class="keyword">class</span> <span class="title">FFT</span></span>
-    <span class="attribute">constructor</span>: <span class="function"><span class="params">(<span class="property">@bufferSize</span>, <span class="property">@sampleRate</span>)</span> -&gt;</span></pre></div>
+          <div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FFT</span></span>
+    <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@bufferSize</span>, <span class="hljs-property">@sampleRate</span>)</span> -&gt;</span></pre></div>
         
       
         
@@ -145,34 +145,34 @@ input buffer and the sample rate of the signal, specifically:</p>
 the transformed frequency data.</p>
 
         
-          <div class='highlight'><pre>      <span class="property">@bandwidth</span> = <span class="property">@sampleRate</span> / <span class="property">@bufferSize</span>
+          <div class='highlight'><pre>      <span class="hljs-property">@bandwidth</span> = <span class="hljs-property">@sampleRate</span> / <span class="hljs-property">@bufferSize</span>
 
-      <span class="property">@spectrum</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span> / <span class="number">2</span>)
-      <span class="property">@real</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
-      <span class="property">@imag</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
+      <span class="hljs-property">@spectrum</span> = <span class="hljs-keyword">new</span> Float32Array(<span class="hljs-property">@bufferSize</span> / <span class="hljs-number">2</span>)
+      <span class="hljs-property">@real</span> = <span class="hljs-keyword">new</span> Float32Array(<span class="hljs-property">@bufferSize</span>)
+      <span class="hljs-property">@imag</span> = <span class="hljs-keyword">new</span> Float32Array(<span class="hljs-property">@bufferSize</span>)
 
-      <span class="property">@reverseTable</span> = <span class="keyword">new</span> Uint32Array(<span class="property">@bufferSize</span>)
+      <span class="hljs-property">@reverseTable</span> = <span class="hljs-keyword">new</span> Uint32Array(<span class="hljs-property">@bufferSize</span>)
 
-      limit = <span class="number">1</span>
-      bit = bufferSize &gt;&gt; <span class="number">1</span>
+      limit = <span class="hljs-number">1</span>
+      bit = bufferSize &gt;&gt; <span class="hljs-number">1</span>
 
-      <span class="keyword">while</span> limit &lt; bufferSize
-        [<span class="number">0.</span>..limit].forEach <span class="function"><span class="params">(i)</span> =&gt;</span>
-          <span class="property">@reverseTable</span>[i + limit] = <span class="property">@reverseTable</span>[i] + bit
-        limit &lt;&lt;= <span class="number">1</span>
-        bit &gt;&gt;= <span class="number">1</span></pre></div>
+      <span class="hljs-keyword">while</span> limit &lt; bufferSize
+        [<span class="hljs-number">0.</span>..limit].forEach <span class="hljs-function"><span class="hljs-params">(i)</span> =&gt;</span>
+          <span class="hljs-property">@reverseTable</span>[i + limit] = <span class="hljs-property">@reverseTable</span>[i] + bit
+        limit &lt;&lt;= <span class="hljs-number">1</span>
+        bit &gt;&gt;= <span class="hljs-number">1</span></pre></div>
         
       
         
         <p>It also generates the <code>sin</code> and <code>cos</code> values in advance.</p>
 
         
-          <div class='highlight'><pre>      <span class="property">@sinTable</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
-      <span class="property">@cosTable</span> = <span class="keyword">new</span> Float32Array(<span class="property">@bufferSize</span>)
+          <div class='highlight'><pre>      <span class="hljs-property">@sinTable</span> = <span class="hljs-keyword">new</span> Float32Array(<span class="hljs-property">@bufferSize</span>)
+      <span class="hljs-property">@cosTable</span> = <span class="hljs-keyword">new</span> Float32Array(<span class="hljs-property">@bufferSize</span>)
 
-      [<span class="number">0.</span>..bufferSize].forEach <span class="function"><span class="params">(i)</span> =&gt;</span>
-        <span class="property">@sinTable</span>[i] = Math.sin(-Math.PI / i)
-        <span class="property">@cosTable</span>[i] = Math.cos(-Math.PI / i)</pre></div>
+      [<span class="hljs-number">0.</span>..bufferSize].forEach <span class="hljs-function"><span class="hljs-params">(i)</span> =&gt;</span>
+        <span class="hljs-property">@sinTable</span>[i] = Math.sin(-Math.PI / i)
+        <span class="hljs-property">@cosTable</span>[i] = Math.cos(-Math.PI / i)</pre></div>
         
       
         
@@ -183,30 +183,30 @@ time-domain audio data and compute the Fourier transform of that data, giving
 the frequency-domain components of the signal.</p>
 
         
-          <div class='highlight'><pre>    <span class="attribute">transform</span>: <span class="function"><span class="params">(buffer)</span> -&gt;</span>
-      bufferSize = <span class="property">@bufferSize</span>
-      cosTable = <span class="property">@cosTable</span>
-      sinTable = <span class="property">@sinTable</span>
-      reverseTable = <span class="property">@reverseTable</span>
-      real = <span class="property">@real</span>
-      imag = <span class="property">@imag</span>
-      spectrum = <span class="property">@spectrum</span>
+          <div class='highlight'><pre>    <span class="hljs-attribute">transform</span>: <span class="hljs-function"><span class="hljs-params">(buffer)</span> -&gt;</span>
+      bufferSize = <span class="hljs-property">@bufferSize</span>
+      cosTable = <span class="hljs-property">@cosTable</span>
+      sinTable = <span class="hljs-property">@sinTable</span>
+      reverseTable = <span class="hljs-property">@reverseTable</span>
+      real = <span class="hljs-property">@real</span>
+      imag = <span class="hljs-property">@imag</span>
+      spectrum = <span class="hljs-property">@spectrum</span>
 
-      halfSize = <span class="number">1</span>
-      [<span class="number">0.</span>..bufferSize].forEach <span class="function"><span class="params">(i)</span> -&gt;</span>
+      halfSize = <span class="hljs-number">1</span>
+      [<span class="hljs-number">0.</span>..bufferSize].forEach <span class="hljs-function"><span class="hljs-params">(i)</span> -&gt;</span>
         real[i] = buffer[reverseTable[i]]
-        imag[i] = <span class="number">0</span>
+        imag[i] = <span class="hljs-number">0</span>
 
-      <span class="keyword">while</span> halfSize &lt; bufferSize
+      <span class="hljs-keyword">while</span> halfSize &lt; bufferSize
         pSSR = cosTable[halfSize]
         pSSI = sinTable[halfSize]
 
-        cPSR = <span class="number">1</span>
-        cPSI = <span class="number">0</span>
+        cPSR = <span class="hljs-number">1</span>
+        cPSI = <span class="hljs-number">0</span>
 
-        [<span class="number">0.</span>..halfSize].forEach <span class="function"><span class="params">(fftStep)</span> -&gt;</span>
+        [<span class="hljs-number">0.</span>..halfSize].forEach <span class="hljs-function"><span class="hljs-params">(fftStep)</span> -&gt;</span>
           i = fftStep
-          <span class="keyword">while</span> i &lt; bufferSize
+          <span class="hljs-keyword">while</span> i &lt; bufferSize
             offset = i + halfSize
             tr = (cPSR * real[offset]) - (cPSI * imag[offset])
             ti = (cPSR * imag[offset]) + (cPSI * real[offset])
@@ -214,14 +214,14 @@ the frequency-domain components of the signal.</p>
             imag[offset] = imag[i] - ti
             real[i] += tr
             imag[i] += ti
-            i += halfSize &lt;&lt; <span class="number">1</span>
+            i += halfSize &lt;&lt; <span class="hljs-number">1</span>
 
           tmpReal = cPSR
           cPSR = (tmpReal * pSSR) - (cPSI * pSSI)
           cPSI = (tmpReal * pSSI) + (cPSI * pSSR)
-        halfSize = halfSize &lt;&lt; <span class="number">1</span>
+        halfSize = halfSize &lt;&lt; <span class="hljs-number">1</span>
 
-      this.calculateSpectrum()</pre></div>
+      <span class="hljs-keyword">this</span>.calculateSpectrum()</pre></div>
         
       
         
@@ -232,13 +232,13 @@ values <strong><code>calculateSpectrum</code></strong> takes the complex numbers
 to real magnitudes for each frequency bin.</p>
 
         
-          <div class='highlight'><pre>    <span class="attribute">calculateSpectrum</span>:<span class="function"> -&gt;</span>
-      spectrum = <span class="property">@spectrum</span>
-      real = <span class="property">@real</span>
-      imag = <span class="property">@imag</span>
-      bSi = <span class="number">2</span> / <span class="property">@bufferSize</span>
+          <div class='highlight'><pre>    <span class="hljs-attribute">calculateSpectrum</span>:<span class="hljs-function"> -&gt;</span>
+      spectrum = <span class="hljs-property">@spectrum</span>
+      real = <span class="hljs-property">@real</span>
+      imag = <span class="hljs-property">@imag</span>
+      bSi = <span class="hljs-number">2</span> / <span class="hljs-property">@bufferSize</span>
       sqrt = Math.sqrt
-      [<span class="number">0.</span>..<span class="property">@bufferSize</span> / <span class="number">2</span>].forEach <span class="function"><span class="params">(index)</span> -&gt;</span>
+      [<span class="hljs-number">0.</span>..<span class="hljs-property">@bufferSize</span> / <span class="hljs-number">2</span>].forEach <span class="hljs-function"><span class="hljs-params">(index)</span> -&gt;</span>
         r = real[index]
         i = imag[index]
         spectrum[index] = bSi * sqrt(r * r + i * i)</pre></div>
@@ -248,7 +248,7 @@ to real magnitudes for each frequency bin.</p>
         <h2 id="fft-instance-">FFT instance:</h2>
 <hr>
 <p>The incoming audio from the microphone has a sample rate (FFT<sub>s</sub>) of
-<code>44100Hz</code>. Since the highest pitch in the pitch to frequency mapping is &#39;B7&#39;
+<code>44100Hz</code>. Since the highest pitch in the pitch to frequency mapping is ‘B7’
 (<code>3951.07Hz</code>), data over roughly <code>8kHz</code> can be ignored. The downsampled rate
 that is used is <code>11025Hz</code> (FFT<sub>s</sub> / 4). As the FFT requires a input of
 length 2<sup>n</sup>, we use <code>8192</code> (2<sup>13</sup>). The relationship between
@@ -260,7 +260,7 @@ FFT sample rate, FFT buffer length and FFT bin resolution, is:</p>
 resolution of <code>1.3458Hz</code></p>
 
         
-          <div class='highlight'><pre>  <span class="keyword">new</span> FFT(Tuner.Constants.FFTSIZE, Tuner.Constants.SAMPLE_RATE / <span class="number">4</span>)</pre></div>
+          <div class='highlight'><pre>  <span class="hljs-keyword">new</span> FFT(Tuner.Constants.FFTSIZE, Tuner.Constants.SAMPLE_RATE / <span class="hljs-number">4</span>)</pre></div>
         
       
       <div class="fleur">h</div>

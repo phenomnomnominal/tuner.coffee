@@ -119,7 +119,7 @@ the tuner in real-time, a shifting window buffer is used. This buffer always
 contains <code>8192</code> samples, however the data is shifted along every <code>2048</code> samples.</p>
 
         
-          <div class='highlight'><pre>Tuner.DataBuffer = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.DataBuffer = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -127,10 +127,10 @@ contains <code>8192</code> samples, however the data is shifted along every <cod
 data around within the buffer.</p>
 
         
-          <div class='highlight'><pre>  buffer = [<span class="number">0.</span>..Tuner.Constants.FFTSIZE].map<span class="function"> -&gt;</span> <span class="number">0</span>
+          <div class='highlight'><pre>  buffer = [<span class="hljs-number">0.</span>..Tuner.Constants.FFTSIZE].map<span class="hljs-function"> -&gt;</span> <span class="hljs-number">0</span>
   bufferFillSize = Tuner.Constants.BUFFER_FILL_SIZE
 
-  shiftToStart = <span class="number">0</span>
+  shiftToStart = <span class="hljs-number">0</span>
   shiftToEnd = buffer.length - Tuner.Constants.BUFFER_FILL_SIZE
   shiftFromStart = Tuner.Constants.BUFFER_FILL_SIZE
   shiftFromEnd = buffer.length
@@ -152,14 +152,14 @@ created, and the <code>onaudioprocess</code> handler is assigned.</p>
 <hr>
 
         
-          <div class='highlight'><pre>  filler.<span class="function"><span class="title">onaudioprocess</span> = <span class="params">(e)</span> -&gt;</span></pre></div>
+          <div class='highlight'><pre>  filler.<span class="hljs-function"><span class="hljs-title">onaudioprocess</span> = <span class="hljs-params">(e)</span> -&gt;</span></pre></div>
         
       
         
         <p>First the data is read out of the <code>inputBuffer</code> and converted into an Array,</p>
 
         
-          <div class='highlight'><pre>    input = (d <span class="keyword">for</span> d <span class="keyword">in</span> e.inputBuffer.getChannelData(<span class="number">0</span>))</pre></div>
+          <div class='highlight'><pre>    input = (d <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> e.inputBuffer.getChannelData(<span class="hljs-number">0</span>))</pre></div>
         
       
         
@@ -173,7 +173,7 @@ created, and the <code>onaudioprocess</code> handler is assigned.</p>
         <p>and the <code>inputBuffer</code> is added to the end of the buffer.</p>
 
         
-          <div class='highlight'><pre>    buffer[insertStart...insertEnd] = input[<span class="number">0.</span>..input.length]</pre></div>
+          <div class='highlight'><pre>    buffer[insertStart...insertEnd] = input[<span class="hljs-number">0.</span>..input.length]</pre></div>
         
       
         

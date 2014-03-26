@@ -118,7 +118,7 @@
 the tuner.</p>
 
         
-          <div class='highlight'><pre>(<span class="built_in">exports</span> ? @).Tuner = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>(<span class="hljs-built_in">exports</span> ? @).Tuner = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -126,10 +126,20 @@ the tuner.</p>
 and display of the tuner.</p>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">init</span> = <span class="params">(containerSelector = <span class="string">'#Tuner'</span>, theme = <span class="string">'light'</span>)</span> -&gt;</span>
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">init</span> = <span class="hljs-params">(containerSelector = <span class="hljs-string">'#Tuner'</span>, theme = <span class="hljs-string">'light'</span>)</span> -&gt;</span>
     Tuner.Display.init containerSelector, theme
-    <span class="keyword">if</span> Tuner.mightWork
-      Tuner.Input.init()
+    <span class="hljs-keyword">if</span> Tuner.mightWork
+      Tuner.Input.init()</pre></div>
+        
+      
+        
+        <p>It has a function attached to it that will stop the tuner running and clear the
+UI.</p>
+
+        
+          <div class='highlight'><pre>  init.<span class="hljs-function"><span class="hljs-title">destroy</span> = -&gt;</span>
+    Tuner.Input.destroy()
+    Tuner.Display.destroy()
 
   init</pre></div>
         

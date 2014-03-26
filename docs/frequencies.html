@@ -118,7 +118,7 @@
 their note names.</p>
 
         
-          <div class='highlight'><pre>Tuner.frequencyUtils = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.frequencyUtils = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -133,9 +133,9 @@ mapped to the notes:</p>
 C), and <code>n</code> is the pitch number relative to that.</p>
 
         
-          <div class='highlight'><pre>  createFrequencies = <span class="keyword">do</span><span class="function"> -&gt;</span>
-    PITCH_NAMES = [<span class="string">"C"</span>, <span class="string">"C#"</span>, <span class="string">"D"</span>, <span class="string">"D#"</span>, <span class="string">"E"</span>, <span class="string">"F"</span>, <span class="string">"F#"</span>, <span class="string">"G"</span>, <span class="string">"G#"</span>, <span class="string">"A"</span>, <span class="string">"A#"</span>, <span class="string">"B"</span>]
-    OCTAVES = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</pre></div>
+          <div class='highlight'><pre>  createFrequencies = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+    PITCH_NAMES = [<span class="hljs-string">"C"</span>, <span class="hljs-string">"C#"</span>, <span class="hljs-string">"D"</span>, <span class="hljs-string">"D#"</span>, <span class="hljs-string">"E"</span>, <span class="hljs-string">"F"</span>, <span class="hljs-string">"F#"</span>, <span class="hljs-string">"G"</span>, <span class="hljs-string">"G#"</span>, <span class="hljs-string">"A"</span>, <span class="hljs-string">"A#"</span>, <span class="hljs-string">"B"</span>]
+    OCTAVES = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>]</pre></div>
         
       
         
@@ -143,13 +143,13 @@ C), and <code>n</code> is the pitch number relative to that.</p>
 standard concert pitch). To start at <code>C1</code>, the <code>note</code> index starts at 4.</p>
 
         
-          <div class='highlight'><pre>    <span class="function"><span class="params">(reference = Tuner.Constants.REFERENCE_PITCH)</span> -&gt;</span>
+          <div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-params">(reference = Tuner.Constants.REFERENCE_PITCH)</span> -&gt;</span>
       freqs = {}
-      note = <span class="number">4</span>
-      OCTAVES.forEach <span class="function"><span class="params">(octave)</span> -&gt;</span>
-        PITCH_NAMES.forEach <span class="function"><span class="params">(pitch)</span> -&gt;</span>
+      note = <span class="hljs-number">4</span>
+      OCTAVES.forEach <span class="hljs-function"><span class="hljs-params">(octave)</span> -&gt;</span>
+        PITCH_NAMES.forEach <span class="hljs-function"><span class="hljs-params">(pitch)</span> -&gt;</span>
           pitchName = pitch + octave
-          freqs[pitchName] = Math.pow(<span class="number">2</span>, (note++ - <span class="number">49</span>) / <span class="number">12</span>) * reference
+          freqs[pitchName] = Math.pow(<span class="hljs-number">2</span>, (note++ - <span class="hljs-number">49</span>) / <span class="hljs-number">12</span>) * reference
       freqs</pre></div>
         
       
@@ -166,15 +166,15 @@ is out of tune by, using the following formula:</p>
 </blockquote>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">getPitch</span> = <span class="params">(freq, minDiff = Infinity)</span> -&gt;</span>
-    <span class="keyword">for</span> own key, val <span class="keyword">of</span> Tuner.frequencies
-      <span class="keyword">if</span> Math.abs(freq - val) &lt; minDiff
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">getPitch</span> = <span class="hljs-params">(freq, minDiff = Infinity)</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> own key, val <span class="hljs-keyword">of</span> Tuner.frequencies
+      <span class="hljs-keyword">if</span> Math.abs(freq - val) &lt; minDiff
         minDiff = Math.abs(freq - val)
         diff = freq - val
         rat = freq / val
         note = key
 
-    cents = <span class="number">1200</span> * (Math.log(freq / Tuner.frequencies[note]) / Math.LN2)
+    cents = <span class="hljs-number">1200</span> * (Math.log(freq / Tuner.frequencies[note]) / Math.LN2)
     [note, cents]
 
   { createFrequencies, getPitch }</pre></div>

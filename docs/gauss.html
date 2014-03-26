@@ -121,7 +121,7 @@ for exact quadratic interpolation in the frequency domain, which results in
 very accurate frequency estimation.</p>
 
         
-          <div class='highlight'><pre>Tuner.Gauss = <span class="keyword">do</span><span class="function"> -&gt;</span></pre></div>
+          <div class='highlight'><pre>Tuner.Gauss = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span></pre></div>
         
       
         
@@ -131,8 +131,8 @@ is inversely proportional to the standard deviation of the function, meaning
 that the larger <strong><code>α</code></strong> is, the narrower the peak of the function is.</p>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">gauss</span> = <span class="params">(length, i, α = <span class="number">0.5</span>, pow = Math.pow, E = Math.E)</span> -&gt;</span>
-    pow(E, -<span class="number">0.5</span> * pow((i - (length - <span class="number">1</span>) / <span class="number">2</span>) / (α * (length - <span class="number">1</span>) / <span class="number">2</span>), <span class="number">2</span>))</pre></div>
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">gauss</span> = <span class="hljs-params">(length, i, α = <span class="hljs-number">0.5</span>, pow = Math.pow, E = Math.E)</span> -&gt;</span>
+    pow(E, -<span class="hljs-number">0.5</span> * pow((i - (length - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>) / (α * (length - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>), <span class="hljs-number">2</span>))</pre></div>
         
       
         
@@ -140,9 +140,9 @@ that the larger <strong><code>α</code></strong> is, the narrower the peak of th
 <strong><code>gauss</code></strong> function on each item in the buffer.</p>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">process</span> = <span class="params">(input, α)</span> -&gt;</span>
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">process</span> = <span class="hljs-params">(input, α)</span> -&gt;</span>
     length = input.length
-    <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">0.</span>..length]
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>..length]
       input[i] *= gauss(length, i, α)
 
   { process }</pre></div>

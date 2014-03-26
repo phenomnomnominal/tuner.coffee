@@ -121,8 +121,8 @@ dangerous assumption, but given that the user will need to grant permission
 for the microphone to be accessed, it shoud be okay.</p>
 
         
-          <div class='highlight'><pre>Tuner.NoiseRemoval = <span class="keyword">do</span><span class="function"> -&gt;</span>
-  processCount = <span class="number">0</span>
+          <div class='highlight'><pre>Tuner.NoiseRemoval = <span class="hljs-keyword">do</span><span class="hljs-function"> -&gt;</span>
+  processCount = <span class="hljs-number">0</span>
   limit = -Infinity</pre></div>
         
       
@@ -134,10 +134,10 @@ of the <code>limit</code> is limited to <code>0.001</code> to hopefully prevent 
 from setting a <code>limit</code> that is too high.</p>
 
         
-          <div class='highlight'><pre>  <span class="function"><span class="title">process</span> = <span class="params">(spectrum)</span> -&gt;</span>
-    <span class="keyword">if</span> processCount &lt; <span class="number">10</span>
-      limit = spectrum.reduce <span class="function"><span class="params">(p = limit, n)</span> -&gt;</span> <span class="keyword">if</span> n &gt; p <span class="keyword">then</span> n <span class="keyword">else</span> p
-      limit = <span class="keyword">if</span> limit  &gt; <span class="number">0.001</span> <span class="keyword">then</span> <span class="number">0.001</span> <span class="keyword">else</span> limit
+          <div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-title">process</span> = <span class="hljs-params">(spectrum)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> processCount &lt; <span class="hljs-number">10</span>
+      limit = spectrum.reduce <span class="hljs-function"><span class="hljs-params">(p = limit, n)</span> -&gt;</span> <span class="hljs-keyword">if</span> n &gt; p <span class="hljs-keyword">then</span> n <span class="hljs-keyword">else</span> p
+      limit = <span class="hljs-keyword">if</span> limit  &gt; <span class="hljs-number">0.001</span> <span class="hljs-keyword">then</span> <span class="hljs-number">0.001</span> <span class="hljs-keyword">else</span> limit
       processCount++</pre></div>
         
       
@@ -146,7 +146,7 @@ from setting a <code>limit</code> that is too high.</p>
 <strong><code>NoiseRemoval</code></strong> module.</p>
 
         
-          <div class='highlight'><pre>    <span class="keyword">else</span>
+          <div class='highlight'><pre>    <span class="hljs-keyword">else</span>
       Tuner.NoiseRemoval.limit = limit
 
   { process }</pre></div>
